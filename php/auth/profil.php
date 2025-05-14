@@ -2,7 +2,7 @@
 include '../php/koneksi.php';
 session_start();
 
-// Check if user is logged in
+
 if (!isset($_SESSION['user'])) {
     header("Location: ../php/login.php");
     exit();
@@ -10,11 +10,11 @@ if (!isset($_SESSION['user'])) {
 
 $user = $_SESSION['user'];
 
-// Handle profile picture upload
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_picture'])) {
     $target_dir = "uploads/";
     
-    // Create directory if it doesn't exist
+    
     if (!file_exists($target_dir)) {
         mkdir($target_dir, 0777, true);
     }
@@ -23,16 +23,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_picture'])) {
     $new_filename = "profile_" . $user['id'] . "." . $file_extension;
     $target_file = $target_dir . $new_filename;
     
-    // Check if image file is valid
+    
     $valid_file = true;
     
-    // Check file size - limit to 5MB
+    
     if ($_FILES["profile_picture"]["size"] > 5000000) {
         echo "<script>alert('File terlalu besar. Maksimal 5MB.');</script>";
         $valid_file = false;
     }
     
-    // Allow certain file formats
+    
     if ($file_extension != "jpg" && $file_extension != "png" && $file_extension != "jpeg" && $file_extension != "gif") {
         echo "<script>alert('Hanya file JPG, JPEG, PNG & GIF yang diperbolehkan.');</script>";
         $valid_file = false;
@@ -40,11 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_picture'])) {
     
     if ($valid_file) {
         if (move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $target_file)) {
-            // Update database with new profile picture path
+            
             $update_query = mysqli_query($koneksi, "UPDATE users SET profile_picture='$target_file' WHERE id=".$user['id']);
             
             if ($update_query) {
-                // Update session data
+                
                 $_SESSION['user']['profile_picture'] = $target_file;
                 echo "<script>alert('Foto profil berhasil diperbarui!');window.location='profil.php';</script>";
             } else {
@@ -61,11 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_picture'])) {
     }    
 }
 
-// Get latest user data
+
 $user_query = mysqli_query($koneksi, "SELECT * FROM users WHERE id=".$user['id']);
 $current_user = mysqli_fetch_assoc($user_query);
 
-// Update session with latest data
+
 $_SESSION['user'] = $current_user;
 ?>
 

@@ -6,6 +6,7 @@
     <title>Hexagon Mart</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 </head>
 <style>
     * {
@@ -271,16 +272,16 @@ body {
     </div>
 
     <nav class="navbar-center">
-        <a href="./landing.html">Home</a>
-        <a href="./menu.html">Menu</a>
-        <a href="./blog.html">Blog</a>
+        <a href="./landing.php">Home</a>
+        <a href="./menu.php">Menu</a>
+        <a href="./blog.php">Blog</a>
         <a href="#">Review</a>
     </nav>
       
 
     <div class="navbar-right">
         <a href="#">🛒<span id="cart-count">0</span></a>
-        <a href="profil.php">👤</a>
+        <a href="../profil.php">👤</a>
     </div>
 </header>
 

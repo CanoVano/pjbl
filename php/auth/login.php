@@ -1,5 +1,5 @@
 <?php 
-include './koneksi.php';
+include '../koneksi.php';
 session_start();
 
 $notif = '';
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user'] = $user;
         $notif = '<div class="notif success">Login berhasil! Mengalihkan...</div>';
-        echo "<meta http-equiv='refresh' content='2;url=landing.html'>";
+        echo "<meta http-equiv='refresh' content='2;url=../landing.php'>";
     } else {
         $notif = '<div class="notif error">Username atau Password salah!</div>';
     }
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Hexagon Mart</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../../css/style.css">
     <style>
         .notif {
             padding: 10px;
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="background">
         <div class="login-container">
-            <img src="../images/log.png" alt="Hexagon Mart" class="logo">
+            <img src="../../images/log.png" alt="Hexagon Mart" class="logo">
             <h2>LOGIN</h2>
 
             <!-- Notifikasi -->

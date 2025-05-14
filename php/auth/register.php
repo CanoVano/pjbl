@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $simpan = mysqli_query($koneksi, "INSERT INTO users (fullname, username, email, password) VALUES ('$fullname', '$username', '$email', '$password')");
         if ($simpan) {
             $notif = '<div class="notif success">Register berhasil! Mengalihkan ke login...</div>';
-            echo "<meta http-equiv='refresh' content='2;url=login.php'>";
+            echo "<meta http-equiv='refresh' content='2;url=../login.php'>";
         } else {
             $notif = '<div class="notif error">Register gagal! Silakan coba lagi.</div>';
         }
