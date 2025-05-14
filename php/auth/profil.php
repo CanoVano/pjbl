@@ -1,50 +1,59 @@
 <?php
-include '../php/koneksi.php';
+// Mulai session dan aktifkan error reporting untuk debugging
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
+// Pastikan koneksi database berhasil
+include '../koneksi.php';
 
+if (!$koneksi) {
+    die("Koneksi database gagal: " . mysqli_connect_error());
+}
+
+// Periksa apakah pengguna sudah login
 if (!isset($_SESSION['user'])) {
     header("Location: ../php/login.php");
     exit();
 }
 
+// Ambil data user dari session
 $user = $_SESSION['user'];
 
-
+// Proses upload foto profil
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_picture'])) {
     $target_dir = "uploads/";
-    
-    
+
+    // Jika folder uploads tidak ada, buat folder
     if (!file_exists($target_dir)) {
         mkdir($target_dir, 0777, true);
     }
-    
+
     $file_extension = pathinfo($_FILES["profile_picture"]["name"], PATHINFO_EXTENSION);
     $new_filename = "profile_" . $user['id'] . "." . $file_extension;
     $target_file = $target_dir . $new_filename;
-    
-    
+
     $valid_file = true;
-    
-    
+
+    // Validasi ukuran file
     if ($_FILES["profile_picture"]["size"] > 5000000) {
         echo "<script>alert('File terlalu besar. Maksimal 5MB.');</script>";
         $valid_file = false;
     }
-    
-    
-    if ($file_extension != "jpg" && $file_extension != "png" && $file_extension != "jpeg" && $file_extension != "gif") {
+
+    // Validasi ekstensi file
+    if (!in_array($file_extension, ['jpg', 'jpeg', 'png', 'gif'])) {
         echo "<script>alert('Hanya file JPG, JPEG, PNG & GIF yang diperbolehkan.');</script>";
         $valid_file = false;
     }
-    
+
+    // Jika file valid, lakukan upload dan update di database
     if ($valid_file) {
         if (move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $target_file)) {
-            
-            $update_query = mysqli_query($koneksi, "UPDATE users SET profile_picture='$target_file' WHERE id=".$user['id']);
-            
+            // Update foto profil di database
+            $update_query = mysqli_query($koneksi, "UPDATE users SET profile_picture='$target_file' WHERE id=" . $user['id']);
+
             if ($update_query) {
-                
                 $_SESSION['user']['profile_picture'] = $target_file;
                 echo "<script>alert('Foto profil berhasil diperbarui!');window.location='profil.php';</script>";
             } else {
@@ -54,21 +63,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_picture'])) {
             echo "<script>alert('Terjadi kesalahan saat mengunggah file.');</script>";
         }
     }
-    if (isset($_GET['logout'])) {
-        session_destroy();
-        header('Location: ../php/login.php');
-        exit;
-    }    
 }
 
+// Logout jika tombol logout ditekan
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header('Location: ../php/login.php');
+    exit;
+}
 
-$user_query = mysqli_query($koneksi, "SELECT * FROM users WHERE id=".$user['id']);
+// Ambil data user terbaru dari database untuk memastikan session tetap up-to-date
+$user_query = mysqli_query($koneksi, "SELECT * FROM users WHERE id=" . $user['id']);
 $current_user = mysqli_fetch_assoc($user_query);
 
-
+// Perbarui session dengan data terbaru
 $_SESSION['user'] = $current_user;
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -198,7 +208,7 @@ $_SESSION['user'] = $current_user;
 <body>
     <div class="profile-container">
         <div class="header">
-            <a href="landing.html">←</a>
+            <a href="../landing.php">←</a>
             <h2>Profil</h2>
         </div>
         

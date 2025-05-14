@@ -281,7 +281,7 @@ body {
 
     <div class="navbar-right">
         <a href="#">🛒<span id="cart-count">0</span></a>
-        <a href="../profil.php">👤</a>
+        <a href="./auth/profil.php">👤</a>
     </div>
 </header>
 
