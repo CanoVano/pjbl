@@ -1,0 +1,116 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Container utama */
+.profile-container {
+    max-width: 500px;
+    margin: 30px auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Header profil */
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.profile-header h2 {
+    font-size: 24px;
+    color: #333;
+}
+
+.back-button,
+.logout-button {
+    text-decoration: none;
+    color: #333;
+    font-size: 20px;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover,
+.logout-button:hover {
+    background-color: #e0f7e9;
+}
+
+/* Foto Profil */
+.profile-picture {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.profile-picture img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #8DE4BE;
+}
+
+/* Perbaiki posisi kamera */
+.upload-icon {
+    font-size: 20px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: #8DE4BE;
+    color: white;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: 2px solid white;
+}
+
+.upload-icon:hover {
+    background-color: #66c6a5;
+}
+
+
+/* Info Box */
+.profile-info {
+    margin-top: 20px;
+}
+
+.info-box {
+    background-color: #8DE4BE;
+    margin-bottom: 15px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Responsive sedikit */
+@media (max-width: 600px) {
+    .profile-container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .profile-picture img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .upload-icon {
+        right: 120px;
+    }
+}
