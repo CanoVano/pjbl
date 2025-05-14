@@ -228,7 +228,7 @@ body {
 }
 
 .footer-logo img {
-    height: 50px;
+    height: 100px;
     margin-bottom: 20px;
 }
 
@@ -359,7 +359,7 @@ body {
 <!-- Footer -->
 <footer class="footer">
     <div class="footer-logo">
-        <img src="../images/logo.png" alt="Hexagon Mart">
+        <img src="../images/log.png" alt="Hexagon Mart">
     </div>
     <nav class="footer-links">
         <a href="#">Home</a>

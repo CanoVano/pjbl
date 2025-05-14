@@ -198,7 +198,7 @@ $_SESSION['user'] = $current_user;
 <body>
     <div class="profile-container">
         <div class="header">
-            <a href="landing.html">←</a>
+            <a href="landing.php">←</a>
             <h2>Profil</h2>
         </div>
         
