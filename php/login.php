@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user'] = $user;
         $notif = '<div class="notif success">Login berhasil! Mengalihkan...</div>';
-        echo "<meta http-equiv='refresh' content='2;url=landing.html'>";
+        echo "<meta http-equiv='refresh' content='2;url=landing.php'>";
     } else {
         $notif = '<div class="notif error">Username atau Password salah!</div>';
     }
