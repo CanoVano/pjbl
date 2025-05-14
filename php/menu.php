@@ -67,6 +67,10 @@ body {
     border-bottom: 2px solid black;
   }  
 
+  .navbar .navbar-center a:hover {
+    border-bottom: 2px solid black;
+}
+
 /* Product section styling */
 .featured-products {
     margin-top: 30px;
@@ -140,8 +144,6 @@ body {
 .add-to-cart:hover {
     background-color: #8ad98a;
 }
-
-/* Cart animation removed */
 
 /* Banner styling */
 .banner-container {
@@ -252,9 +254,9 @@ body {
         </div>
     
         <nav class="navbar-center">
-            <a href="./landing.html">Home</a>
-            <a href="./menu.html">Menu</a>
-            <a href="./blog.html">Blog</a>
+            <a href="./landing.php">Home</a>
+            <a href="./menu.phpl">Menu</a>
+            <a href="./blog.php">Blog</a>
             <a href="#">Review</a>
         </nav>
           

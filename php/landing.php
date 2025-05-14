@@ -62,6 +62,10 @@ body {
     border-bottom: 2px solid black;
   }  
 
+.navbar .navbar-center a:hover {
+    border-bottom: 2px solid black;
+}
+
 /* Hero */
 .hero {
     display: flex;
@@ -139,7 +143,7 @@ body {
     height: 200px;
     width: 100%;
     object-fit: contain;
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 .product-info {
@@ -162,6 +166,7 @@ body {
 }
 
 .add-to-cart {
+    margin-top: auto;
     background-color: #A0E7A0;
     color: black;
     border: none;
@@ -281,7 +286,7 @@ body {
 
     <div class="navbar-right">
         <a href="#">🛒<span id="cart-count">0</span></a>
-        <a href="./auth/profil.php">👤</a>
+        <a href="profil.php">👤</a>
     </div>
 </header>
 
@@ -365,7 +370,7 @@ body {
     <div class="social-icons">
         <a href="#"><i class="fa-brands fa-facebook"></i></a>
         <a href="#"><i class="fa-brands fa-twitter"></i></a>
-        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.instagram.com/vano_fs?igsh=ejIwcmI0NWo2djY3"><i class="fa-brands fa-instagram"></i></a>
     </div>    
     <p class="copyright">
         Copyright Hexagon Mart © 2024. All Right Reserved

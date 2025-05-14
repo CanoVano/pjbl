@@ -185,16 +185,13 @@ body {
             margin-bottom: 15px;
         }
         
-        .read-more-btn {
-            display: inline-block;
-            background-color: #fff;
-            border: 1px solid #ee0707;
-            border-radius: 5px;
-            padding: 5px 15px;
-            cursor: pointer;
-            font-size: 14px;
-            text-decoration: none;
+        .read-more {
             color: #333;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+            border-bottom: 1px solid #333;
         }
         
         .promo-info {
@@ -224,9 +221,9 @@ body {
         </div>
     
         <nav class="navbar-center">
-            <a href="./landing.html">Home</a>
-            <a href="./menu.html">Menu</a>
-            <a href="#">Blog</a>
+            <a href="./landing.php">Home</a>
+            <a href="./menu.php">Menu</a>
+            <a href="./blog.php">Blog</a>
             <a href="#">Review</a>
         </nav>
           
@@ -238,7 +235,7 @@ body {
     </header>
 
     <main class="main-content">
-        <div class="back-button">⬅</div>
+        <a href="blog.php" class="back-button">⬅</a>
         <span class="category">FOOD</span>
         <span class="date">17 nov 2024</span>
 
@@ -285,7 +282,7 @@ body {
                     <p class="product-desc">
                         Hexagon Mart kembali menghadirkan kejutan spesial untuk anda. Kali ini Salah Satu UMKM Kami menyediakan makanan baru yaitu pizza yang siap memuaskan lidah anda.
                     </p>
-                    <a href="#" class="read-more-btn">Read More...</a>
+                    <a href="#" class="read-more">Read More...</a>
                 </div>
             </div>
             
@@ -300,7 +297,7 @@ body {
                     <p class="product-desc">
                         Hexagon Mart kembali menghadirkan kejutan spesial untuk anda. Kali ini Salah Satu UMKM Kami menyediakan makanan baru yaitu pizza yang siap memuaskan lidah anda.
                     </p>
-                    <a href="#" class="read-more-btn">Read More...</a>
+                    <a href="#" class="read-more">Read More...</a>
                 </div>
             </div>
             
@@ -315,7 +312,7 @@ body {
                     <p class="product-desc">
                         Hexagon Mart kembali menghadirkan kejutan spesial untuk anda. Kali ini Salah Satu UMKM Kami menyediakan makanan baru yaitu pizza yang siap memuaskan lidah anda.
                     </p>
-                    <a href="#" class="read-more-btn">Read More...</a>
+                    <a href="#" class="read-more">Read More...</a>
                 </div>
             </div>
         </div>
