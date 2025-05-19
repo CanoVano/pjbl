@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="background">
         <div class="login-container">
-            <img src="../images/logo.png" alt="Hexagon Mart" class="logo">
+            <img src="images/logo.png" alt="Hexagon Mart" class="logo">
             <h2>REGISTER</h2>
 
             <!-- Notifikasi -->
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <span class="eye-icon" onclick="togglePassword()">👁️</span>
                 </div>
                 <button type="submit" class="login-btn">REGISTER</button>
-                <p class="register-link">Sudah punya akun? <a href="../php/login.php">Login</a></p>
+                <p class="register-link">Sudah punya akun? <a href="php/login.php">Login</a></p>
             </form>
         </div>
     </div>

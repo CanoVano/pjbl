@@ -6,7 +6,6 @@
     <title>Hexagon Mart</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 </head>
 <style>
     * {
@@ -32,7 +31,7 @@ body {
 
 .navbar .logo img {
     height: 60px;
-}
+} 
 
 .navbar-center {
     display: flex;
@@ -61,10 +60,6 @@ body {
     font-weight: bold;
     border-bottom: 2px solid black;
   }  
-
-.navbar .navbar-center a:hover {
-    border-bottom: 2px solid black;
-}
 
 /* Hero */
 .hero {
@@ -143,7 +138,7 @@ body {
     height: 200px;
     width: 100%;
     object-fit: contain;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .product-info {
@@ -166,7 +161,6 @@ body {
 }
 
 .add-to-cart {
-    margin-top: auto;
     background-color: #A0E7A0;
     color: black;
     border: none;
@@ -228,7 +222,7 @@ body {
 }
 
 .footer-logo img {
-    height: 100px;
+    height: 50px;
     margin-bottom: 20px;
 }
 
@@ -266,6 +260,28 @@ body {
     padding-top: 10px;
 }
 
+.floating-info-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 999;
+    transition: background-color 0.3s;
+}
+
+.floating-info-button:hover {
+    background-color: #f0f0f0;
+}
 
 </style>
 <body>
@@ -277,9 +293,9 @@ body {
     </div>
 
     <nav class="navbar-center">
-        <a href="./landing.php">Home</a>
-        <a href="./menu.php">Menu</a>
-        <a href="./blog.php">Blog</a>
+        <a href="./landing.html">Home</a>
+        <a href="./menu.html">Menu</a>
+        <a href="./blog.html">Blog</a>
         <a href="#">Review</a>
     </nav>
       
@@ -357,9 +373,12 @@ body {
 </section>
 
 <!-- Footer -->
+<div class="floating-info-button">
+    <i class="fas fa-info"></i>
+  </div>
 <footer class="footer">
     <div class="footer-logo">
-        <img src="../images/log.png" alt="Hexagon Mart">
+        <img src="../images/logo.png" alt="Hexagon Mart">
     </div>
     <nav class="footer-links">
         <a href="#">Home</a>
@@ -370,7 +389,7 @@ body {
     <div class="social-icons">
         <a href="#"><i class="fa-brands fa-facebook"></i></a>
         <a href="#"><i class="fa-brands fa-twitter"></i></a>
-        <a href="https://www.instagram.com/vano_fs?igsh=ejIwcmI0NWo2djY3"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
     </div>    
     <p class="copyright">
         Copyright Hexagon Mart © 2024. All Right Reserved

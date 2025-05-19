@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="remember">Remember me</label>
                 </div>
                 <button type="submit" class="login-btn">LOGIN</button>
-                <p class="register-link">Tidak mempunyai akun? <a href="../php/register.php">Register</a></p>
+                <p class="register-link">Tidak mempunyai akun? <a href="../index.php">Register</a></p>
             </form>
         </div>
     </div>
@@ -102,6 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 icon.textContent = "👁️"; // Ganti ikon menjadi mata terbuka
             }
         }
+
+        
     </script>
 </body>
 </html>
