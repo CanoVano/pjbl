@@ -1,3 +1,31 @@
+
+<?php
+session_start(); // Mulai session
+
+include 'koneksi.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
+    $product_id = $_POST['product_id'];
+
+    // Jika session cart belum ada, buat array baru
+    if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = [];
+    }
+
+    // Jika produk sudah ada di cart, tambah jumlahnya
+    if (isset($_SESSION['cart'][$product_id])) {
+    $_SESSION['cart'][$product_id] += 1; // Tambah jumlah produk
+} else {
+    $_SESSION['cart'][$product_id] = 1; // Inisialisasi dengan 1
+}
+
+    // Redirect supaya form tidak submit ulang jika refresh page
+    header("Location: landing.php");
+    exit;
+}
+
+$produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,284 +34,283 @@
     <title>Hexagon Mart</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="">
-</head>
-<style>
+    <style>
     * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-body {
-    font-family: 'Poppins', sans-serif;
-    color: #333;
-}
-
-
-/* Navbar */
-.navbar {
-    background: #F6AB0E;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 40px;
-}
-
-.navbar .logo img {
-    height: 60px;
-} 
-
-.navbar-center {
-    display: flex;
-    gap: 20px;
-}
-
-.navbar-center a {
-    text-decoration: none;
-    color: black;
-    font-weight: 500;
-    padding: 10px;
-}
-
-.navbar-right {
-    display: flex;
-    gap: 15px;
-}
-
-.navbar-right a {
-    text-decoration: none;
-    font-size: 20px;
-    color: black;
-}
-
-.navbar-center a.active {
-    font-weight: bold;
-    border-bottom: 2px solid black;
-  }  
-
-/* Hero */
-.hero {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* awalnya space-between, sekarang center */
-    gap: 50px; /* kasih jarak antar teks dan gambar */
-    padding: 60px 40px;
-}
+    body {
+        font-family: 'Poppins', sans-serif;
+        color: #333;
+    }
 
 
-.hero-text h3 {
-    font-weight: normal;
-}
+    /* Navbar */
+    .navbar {
+        background: #F6AB0E;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 40px;
+    }
 
-.hero-text h1 {
-    font-size: 2.5em;
-}
+    .navbar .logo img {
+        height: 60px;
+    } 
 
-.hero-text span {
-    color: purple;
-}
+    .navbar-center {
+        display: flex;
+        gap: 20px;
+    }
 
-.hero-text p {
-    margin: 20px 0;
-}
+    .navbar-center a {
+        text-decoration: none;
+        color: black;
+        font-weight: 500;
+        padding: 10px;
+    }
 
-.hero-text button {
-    padding: 10px 20px;
-    background: lightgray;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-}
+    .navbar-right {
+        display: flex;
+        gap: 15px;
+    }
 
-.hero-image img.circle-image {
-    width: 300px;
-    height: 300px;
-    object-fit: center;
-    border-radius: 50%;
-}
+    .navbar-right a {
+        text-decoration: none;
+        font-size: 20px;
+        color: black;
+    }
 
-/* Featured Products */
-.featured-products {
-    text-align: center;
-    padding: 50px 20px;
-}
+    .navbar-center a.active {
+        font-weight: bold;
+        border-bottom: 2px solid black;
+    }  
 
-.featured-products h2 {
-    margin-bottom: 30px;
-}
+    /* Hero */
+    .hero {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 50px;
+        padding: 60px 40px;
+    }
 
-.products {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
 
-.product-card {
-    max-width: 250px;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-}
+    .hero-text h3 {
+        font-weight: normal;
+    }
 
-.product-card:hover {
-    transform: translateY(-5px);
-}
+    .hero-text h1 {
+        font-size: 2.5em;
+    }
 
-.product-image {
-    height: 200px;
-    width: 100%;
-    object-fit: contain;
-    border-radius: 10px;
-}
+    .hero-text span {
+        color: purple;
+    }
 
-.product-info {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
+    .hero-text p {
+        margin: 20px 0;
+    }
 
-.product-price {
-    font-size: 18px;
-    font-weight: bold;
-    color: #1a8917;
-    margin-bottom: 5px;
-}
+    .hero-text button {
+        padding: 10px 20px;
+        background: lightgray;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+    }
 
-.product-name {
-    font-size: 16px;
-    margin-bottom: 10px;
-}
+    .hero-image img.circle-image {
+        width: 300px;
+        height: 300px;
+        object-fit: center;
+        border-radius: 50%;
+    }
 
-.add-to-cart {
-    background-color: #A0E7A0;
-    color: black;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-}
+    /* Featured Products */
+    .featured-products {
+        text-align: center;
+        padding: 50px 20px;
+    }
 
-.add-to-cart:hover {
-    background-color: #8ad98a;
-}
+    .featured-products h2 {
+        margin-bottom: 30px;
+    }
 
-.view-all {
-    margin-top: 30px;
-    padding: 10px 20px;
-    background: white;
-    border: 1px solid black;
-    cursor: pointer;
-}
+    .products {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
 
-/* Newsletter */
-.newsletter {
-    background: #333;
-    color: white;
-    padding: 60px 20px;
-    text-align: center;
-}
+    .product-card {
+        max-width: 250px;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+    }
 
-.newsletter-form {
-    margin: 20px 0;
-}
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
 
-.newsletter-form input {
-    padding: 10px;
-    width: 250px;
-    margin-right: 10px;
-}
+    .product-image {
+        height: 200px;
+        width: 100%;
+        object-fit: contain;
+        border-radius: 10px;
+    }
 
-.newsletter-form button {
-    padding: 10px 20px;
-    background: transparent;
-    color: white;
-    border: 1px solid white;
-    cursor: pointer;
-}
+    .product-info {
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
 
-.small-text {
-    font-size: 0.8em;
-    margin-top: 10px;
-}
+    .product-price {
+        font-size: 18px;
+        font-weight: bold;
+        color: #1a8917;
+        margin-bottom: 5px;
+    }
 
-/* Footer */
-.footer {
-    background: #f5f5f5;
-    text-align: center;
-    padding: 40px 20px;
-}
+    .product-name {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
 
-.footer-logo img {
-    height: 50px;
-    margin-bottom: 20px;
-}
+    .add-to-cart {
+        background-color: #A0E7A0;
+        color: black;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
 
-.footer-links {
-    margin-bottom: 20px;
-}
+    .add-to-cart:hover {
+        background-color: #8ad98a;
+    }
 
-.footer-links a {
-    margin: 0 10px;
-    text-decoration: none;
-    color: black;
-}
+    .view-all {
+        margin-top: 30px;
+        padding: 10px 20px;
+        background: white;
+        border: 1px solid black;
+        cursor: pointer;
+    }
 
-.social-icons {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 20px;
-}
+    /* Newsletter */
+    .newsletter {
+        background: #333;
+        color: white;
+        padding: 60px 20px;
+        text-align: center;
+    }
 
-.social-icons a {
-    font-size: 24px;
-    color: #000; /* Warna icon */
-    transition: color 0.3s;
-}
+    .newsletter-form {
+        margin: 20px 0;
+    }
 
-.social-icons a:hover {
-    color: #6c63ff; /* Warna saat dihover */
-}
+    .newsletter-form input {
+        padding: 10px;
+        width: 250px;
+        margin-right: 10px;
+    }
 
-.copyright {
-    text-align: center;
-    margin-top: 20px;
-    border-top: 3px solid #000;
-    padding-top: 10px;
-}
+    .newsletter-form button {
+        padding: 10px 20px;
+        background: transparent;
+        color: white;
+        border: 1px solid white;
+        cursor: pointer;
+    }
 
-.floating-info-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 45px;
-    height: 45px;
-    background-color: #ffffff;
-    border-radius: 50%;
-    border: 2px solid #ccc;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    cursor: pointer;
-    z-index: 999;
-    transition: background-color 0.3s;
-}
+    .small-text {
+        font-size: 0.8em;
+        margin-top: 10px;
+    }
 
-.floating-info-button:hover {
-    background-color: #f0f0f0;
-}
+    /* Footer */
+    .footer {
+        background: #f5f5f5;
+        text-align: center;
+        padding: 40px 20px;
+    }
 
-</style>
+    .footer-logo img {
+        height: 100px;
+        margin-bottom: 20px;
+    }
+
+    .footer-links {
+        margin-bottom: 20px;
+    }
+
+    .footer-links a {
+        margin: 0 10px;
+        text-decoration: none;
+        color: black;
+    }
+
+    .social-icons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .social-icons a {
+        font-size: 24px;
+        color: #000;
+        transition: color 0.3s;
+    }
+
+    .social-icons a:hover {
+        color: #6c63ff;
+    }
+
+    .copyright {
+        text-align: center;
+        margin-top: 20px;
+        border-top: 3px solid #000;
+        padding-top: 10px;
+    }
+
+    .floating-info-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        border: 2px solid #ccc;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        cursor: pointer;
+        z-index: 999;
+        transition: background-color 0.3s;
+    }
+
+    .floating-info-button:hover {
+        background-color: #f0f0f0;
+    }
+    </style>
+</head>
 <body>
 
 <!-- Navbar -->
@@ -293,19 +320,17 @@ body {
     </div>
 
     <nav class="navbar-center">
-        <a href="./landing.html">Home</a>
-        <a href="./menu.html">Menu</a>
-        <a href="./blog.html">Blog</a>
+        <a href="./landing.php">Home</a>
+        <a href="./menu.php">Menu</a>
+        <a href="./blog.php">Blog</a>
         <a href="#">Review</a>
     </nav>
       
-
     <div class="navbar-right">
-        <a href="#">🛒<span id="cart-count">0</span></a>
+        <a href="./cart.php">🛒<span id="cart-count"><?= array_sum($_SESSION['cart'] ?? []) ?></span></a>
         <a href="profil.php">👤</a>
     </div>
 </header>
-
 
 <!-- Hero Section -->
 <section class="hero">
@@ -324,49 +349,31 @@ body {
 <section class="featured-products">
     <h2>FEATURED PRODUCTS</h2>
     <div class="products">
+        <?php while ($row = mysqli_fetch_assoc($produk)) : ?>
         <div class="product-card">
-            <img src="../images/yu.png" alt="Ayam Goreng Sambal" class="product-image">
+            <img src="../images/<?= $row['image'] ?>" alt="<?= $row['name'] ?>" class="product-image">
             <div class="product-info">
-                <p class="product-price">Rp 15.000</p>
-                <p class="product-name">Ayam Goreng Sambal Spesial dengan nasi putih</p>
-                <button class="add-to-cart">tambah</button>
+                <p class="product-price">Rp <?= number_format($row['price'], 0, ',', '.') ?></p>
+                <p class="product-name"><?= $row['name'] ?></p>
+                <form method="POST" action="">
+                    <input type="hidden" name="product_id" value="<?= $row['id'] ?>">
+                    <button type="submit" class="add-to-cart">tambah</button>
+                </form>     
             </div>
         </div>
-        <div class="product-card">
-            <img src="../images/yu.png" alt="Ayam Goreng" class="product-image">
-            <div class="product-info">
-                <p class="product-price">Rp 16.000</p>
-                <p class="product-name">Ayam goreng + nasi putih dan sambal kecap manis</p>
-                <button class="add-to-cart">tambah</button>
-            </div>
-        </div>
-        <div class="product-card">
-            <img src="../images/yu.png" alt="Mie Goreng" class="product-image">
-            <div class="product-info">
-                <p class="product-price">Rp 18.000</p>
-                <p class="product-name">Mie goreng istimewa paket super dan sayuran yang segar</p>
-                <button class="add-to-cart">tambah</button>
-            </div>
-        </div>
-        <div class="product-card">
-            <img src="../images/yu.png" alt="Ayam Goreng Sambal" class="product-image">
-            <div class="product-info">
-                <p class="product-price">Rp 15.000</p>
-                <p class="product-name">Ayam Goreng Sambal Spesial dengan nasi putih</p>
-                <button class="add-to-cart">tambah</button>
-            </div>
-        </div>
+        <?php endwhile; ?>
     </div>
-    <button class="view-all" href="./menu.html">View All</button>
+    <button class="view-all" onclick="window.location.href='./menu.php'">View All</button>
 </section>
 
 <!-- Newsletter -->
 <section class="newsletter">
     <h2>Dapatkan Notifikasi Untuk Produk Baru dan Diskon</h2>
-    <div class="newsletter-form">
-        <input type="email" placeholder="Email kamu...">
-        <button>Get started</button>
-    </div>
+    <form id="newsletter-form" class="newsletter-form">
+        <input type="email" name="email" placeholder="Email kamu..." required>
+        <button type="submit">Get started</button>
+    </form>
+    <div id="newsletter-message" style="color: white; margin-top: 10px;"></div>
     <p class="small-text">
         Get a response tomorrow if you submit by 9pm today. If we received after 9pm will get a response the following day.
     </p>
@@ -375,10 +382,10 @@ body {
 <!-- Footer -->
 <div class="floating-info-button">
     <i class="fas fa-info"></i>
-  </div>
+</div>
 <footer class="footer">
     <div class="footer-logo">
-        <img src="../images/logo.png" alt="Hexagon Mart">
+        <img src="../images/log.png" alt="Hexagon Mart">
     </div>
     <nav class="footer-links">
         <a href="#">Home</a>
@@ -395,19 +402,47 @@ body {
         Copyright Hexagon Mart © 2024. All Right Reserved
     </p>
 </footer>
-<script>
-    const links = document.querySelectorAll('.navbar-center a');
-const currentPage = window.location.pathname.split("/").pop(); // Ambil nama file terakhir
 
-links.forEach(link => {
-  const href = link.getAttribute('href').split("/").pop(); // Ambil nama file terakhir juga
-  if (href === currentPage) {
-    link.classList.add('active');
-  }
+<script>
+    document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+    const msg = document.getElementById('newsletter-message');
+
+    fetch('./subscribe.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            msg.style.color = 'lightgreen';
+            msg.textContent = data.message;
+            form.reset();
+        } else {
+            msg.style.color = 'red';
+            msg.textContent = data.message;
+        }
+    })
+    .catch(() => {
+        msg.style.color = 'red';
+        msg.textContent = 'Terjadi kesalahan, coba lagi nanti.';
+    });
 });
 
 
-  </script>
+    const links = document.querySelectorAll('.navbar-center a');
+    const currentPage = window.location.pathname.split("/").pop(); // Ambil nama file terakhir
+
+    links.forEach(link => {
+        const href = link.getAttribute('href').split("/").pop(); // Ambil nama file terakhir juga
+        if (href === currentPage) {
+            link.classList.add('active');
+        }
+    });
+</script>
   
 </body>
 </html>
