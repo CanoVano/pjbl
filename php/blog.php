@@ -1,4 +1,5 @@
 <?php
+session_start(); // Start session
 include 'koneksi.php'; // Pastikan path ke file koneksi.php sudah benar
 // Query untuk mengambil featured blog post
 $featured_query = "SELECT bp.*, bc.name as category_name 
@@ -52,7 +53,7 @@ $popular_posts_result = mysqli_query($koneksi, $popular_posts_query);
     </nav>
       
     <div class="navbar-right">
-        <a href="cart.php">🛒<span id="cart-count">0</span></a>
+        <a href="cart.php">🛒<span id="cart-count"><?= array_sum($_SESSION['cart'] ?? []) ?></span></a>
         <a href="profil.php">👤</a>
     </div>
 </header>
