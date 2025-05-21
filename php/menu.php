@@ -1,3 +1,42 @@
+<?php
+session_start(); // Start session
+
+include 'koneksi.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
+    $product_id = $_POST['product_id'];
+
+    // If session cart doesn't exist, create a new array
+    if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = [];
+    }
+
+    // If product already exists in cart, increase the quantity
+    if (isset($_SESSION['cart'][$product_id])) {
+        $_SESSION['cart'][$product_id] += 1; // Increase product quantity
+    } else {
+        $_SESSION['cart'][$product_id] = 1; // Initialize with 1
+    }
+
+    // Redirect to prevent form resubmission on page refresh
+    header("Location: menu.php");
+    exit;
+}
+
+// Product data array for descriptions - this will be used in detail_produk.php
+$product_descriptions = [
+    1 => "Ayam Goreng Sambal Spesial dengan nasi putih. Produk ini dibuat dari ayam pilihan berkualitas tinggi dari peternakan terbaik, diolah secara higienis dan disukai oleh banyak orang.",
+    2 => "Ayam goreng + nasi putih dan sambal kecap manis. Produk ini dibuat dari ayam pilihan berkualitas tinggi dari peternakan terbaik, diolah secara higienis dan disukai oleh banyak orang.",
+    3 => "Mie goreng istimewa paket super dan sayuran yang segar. Produk ini dibuat dari bahan-bahan pilihan berkualitas tinggi, diolah secara higienis dan disukai oleh banyak orang.",
+    4 => "Mie kuah Jawa dengan rasa dan tekstur mantap yang menggugah. Produk ini dibuat dari bahan-bahan pilihan berkualitas tinggi, diolah secara higienis dan disukai oleh banyak orang.",
+    5 => "Sayur kuah kental dari olahan jamu mentah dengan racikan saus daerah. Produk ini dibuat dari sayuran segar pilihan berkualitas tinggi, diolah secara higienis dan disukai oleh banyak orang.",
+    6 => "Nasi goreng spesial kampung yang sangat istimewa. Produk ini dibuat dari beras pilihan berkualitas tinggi, diolah secara higienis dan disukai oleh banyak orang.",
+    7 => "Kwetiau goreng seafood dengan tambahan bahan-bahan seafood yang fresh. Produk ini dibuat dari kwetiau dan seafood pilihan berkualitas tinggi, diolah secara higienis dan disukai oleh banyak orang."
+];
+
+// Store product descriptions in session for detail_produk.php to use
+$_SESSION['product_descriptions'] = $product_descriptions;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,6 +147,7 @@ body {
     width: 100%;
     object-fit: contain;
     border-radius: 8px;
+    cursor: pointer; /* Add cursor pointer to indicate clickable */
 }
 
 .product-info {
@@ -253,16 +293,16 @@ body {
             <img src="../images/log.png" alt="Hexagon Mart">
         </div>
     
-        <nav class="navbar-center">
-            <a href="./landing.php">Home</a>
-            <a href="./menu.phpl">Menu</a>
-            <a href="./blog.php">Blog</a>
-            <a href="#">Review</a>
-        </nav>
+    <nav class="navbar-center">
+        <a href="./landing.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'landing.php' ? 'active' : ''; ?>">Home</a>
+        <a href="./menu.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'menu.php' ? 'active' : ''; ?>">Menu</a>
+        <a href="./blog.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'blog.php' ? 'active' : ''; ?>">Blog</a>
+        <a href="./review.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'review.php' ? 'active' : ''; ?>">Review</a>
+    </nav>
           
     
         <div class="navbar-right">
-            <a href="#">🛒<span id="cart-count">0</span></a>
+            <a href="./cart.php">🛒<span id="cart-count"><?= array_sum($_SESSION['cart'] ?? []) ?></span></a>
             <a href="profil.php">👤</a>
         </div>
     </header>
@@ -273,27 +313,42 @@ body {
             <h2 class="section-title">Terlaris minggu ini</h2>
             <div class="products">
                 <div class="product-card">
-                    <img src="../images/yu.png" alt="Ayam Goreng Sambal" class="product-image">
+                    <a href="detail_produk.php?id=1">
+                        <img src="../images/yu.png" alt="Ayam Goreng Sambal" class="product-image">
+                    </a>
                     <div class="product-info">
                         <p class="product-price">Rp 15.000</p>
                         <p class="product-name">Ayam Goreng Sambal Spesial dengan nasi putih</p>
-                        <button class="add-to-cart">tambah</button>
+                        <form method="POST" action="">
+                            <input type="hidden" name="product_id" value="1">
+                            <button type="submit" class="add-to-cart">tambah</button>
+                        </form>
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="../images/yu.png" alt="Ayam Goreng" class="product-image">
+                    <a href="detail_produk.php?id=2">
+                        <img src="../images/yu.png" alt="Ayam Goreng" class="product-image">
+                    </a>
                     <div class="product-info">
                         <p class="product-price">Rp 16.000</p>
                         <p class="product-name">Ayam goreng + nasi putih dan sambal kecap manis</p>
-                        <button class="add-to-cart">tambah</button>
+                        <form method="POST" action="">
+                            <input type="hidden" name="product_id" value="2">
+                            <button type="submit" class="add-to-cart">tambah</button>
+                        </form>
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="../images/yu.png" alt="Mie Goreng" class="product-image">
+                    <a href="detail_produk.php?id=3">
+                        <img src="../images/yu.png" alt="Mie Goreng" class="product-image">
+                    </a>
                     <div class="product-info">
                         <p class="product-price">Rp 18.000</p>
                         <p class="product-name">Mie goreng istimewa paket super dan sayuran yang segar</p>
-                        <button class="add-to-cart">tambah</button>
+                        <form method="POST" action="">
+                            <input type="hidden" name="product_id" value="3">
+                            <button type="submit" class="add-to-cart">tambah</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -338,44 +393,106 @@ body {
             <h2 class="section-title">Aneka kuliner</h2>
             <div class="products">
                 <div class="product-card">
-                    <img src="../images/yu.png" alt="Mie Kuah" class="product-image">
+                    <a href="detail_produk.php?id=4">
+                        <img src="../images/yu.png" alt="Mie Kuah" class="product-image">
+                    </a>
                     <div class="product-info">
                         <p class="product-price">Rp 14.000</p>
                         <p class="product-name">Mie kuah Jawa dengan rasa dan tekstur mantap yang menggugah</p>
-                        <button class="add-to-cart">tambah</button>
+                        <form method="POST" action="">
+                            <input type="hidden" name="product_id" value="4">
+                            <button type="submit" class="add-to-cart">tambah</button>
+                        </form>
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="../images/yu.png" alt="Sayur Kuah" class="product-image">
+                    <a href="detail_produk.php?id=5">
+                        <img src="../images/yu.png" alt="Sayur Kuah" class="product-image">
+                    </a>
                     <div class="product-info">
                         <p class="product-price">Rp 28.000</p>
                         <p class="product-name">Sayur kuah kental dari olahan jamu mentah dengan racikan saus daerah</p>
-                        <button class="add-to-cart">tambah</button>
+                        <form method="POST" action="">
+                            <input type="hidden" name="product_id" value="5">
+                            <button type="submit" class="add-to-cart">tambah</button>
+                        </form>
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="../images/yu.png" alt="Nasi Goreng" class="product-image">
+                    <a href="detail_produk.php?id=6">
+                        <img src="../images/yu.png" alt="Nasi Goreng" class="product-image">
+                    </a>
                     <div class="product-info">
                         <p class="product-price">Rp 23.000</p>
                         <p class="product-name">Nasi goreng spesial kampung yang sangat istimewa</p>
-                        <button class="add-to-cart">tambah</button>
+                        <form method="POST" action="">
+                            <input type="hidden" name="product_id" value="6">
+                            <button type="submit" class="add-to-cart">tambah</button>
+                        </form>
                     </div>
                 </div>
                 <div class="product-card">
-                    <img src="../images/yu.png" alt="Kwetiau" class="product-image">
+                    <a href="detail_produk.php?id=7">
+                        <img src="../images/yu.png" alt="Kwetiau" class="product-image">
+                    </a>
                     <div class="product-info">
                         <p class="product-price">Rp 20.000</p>
                         <p class="product-name">Kwetiau goreng seafood dengan tambahan bahan-bahan seafood yang fresh</p>
-                        <button class="add-to-cart">tambah</button>
+                        <form method="POST" action="">
+                            <input type="hidden" name="product_id" value="7">
+                            <button type="submit" class="add-to-cart">tambah</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </section>
-
-        <div class="load-more-container" style="text-align: center; margin: 30px 0;">
-            <button class="add-to-cart" style="padding: 10px 20px;">Lihat keseluruhan</button>
-        </div>
     </div>
     
+    <script>
+        // Banner slider functionality
+        const wrapper = document.querySelector('.banner-wrapper');
+        const dots = document.querySelectorAll('.dot');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        let currentIndex = 0;
+
+        // Update the banner position
+        function updateSlider() {
+            wrapper.style.transform = translateX(-${currentIndex * 100}%);
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        // Event listeners for dots
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentIndex = index;
+                updateSlider();
+            });
+        });
+
+        // Event listeners for navigation buttons
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex === 0) ? dots.length - 1 : currentIndex - 1;
+            updateSlider();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex === dots.length - 1) ? 0 : currentIndex + 1;
+            updateSlider();
+        });
+
+        // Active navigation link
+        const links = document.querySelectorAll('.navbar-center a');
+        const currentPage = window.location.pathname.split("/").pop(); // Get the last file name
+
+        links.forEach(link => {
+            const href = link.getAttribute('href').split("/").pop(); // Get the last file name too
+            if (href === currentPage) {
+                link.classList.add('active');
+            }
+        });
+    </script>
 </body>
 </html>

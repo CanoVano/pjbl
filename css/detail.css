@@ -1,0 +1,205 @@
+* {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+            
+        }
+        
+body {
+        background-color: #f5f5f5;
+        color: #333;
+    
+}
+
+    .navbar {
+            font-family: 'Poppins', sans-serif;
+    background: #F6AB0E;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 40px;
+}
+
+.navbar .logo img {
+    height: 60px;
+}
+
+.navbar-center {
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-center a {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    padding: 10px;
+}
+
+.navbar-right {
+    display: flex;
+    gap: 15px;
+}
+
+.navbar-right a {
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+}
+
+.navbar-center a.active {
+    font-weight: bold;
+    border-bottom: 2px solid black;
+  }  
+
+  .main-content {
+    max-width: 900px;
+    margin: 2rem auto;
+   flex-direction: column;
+   
+    padding: 2rem;
+  }
+
+  .category {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        
+        .date {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-bottom: 1rem;
+        }
+        
+        .featured-image {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            max-height: 400px;
+            object-fit: cover;
+        }
+        
+        .article-content {
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .article-content h3 {
+            margin: 1.5rem 0 1rem;
+        }
+        
+        .article-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .suggested-posts {
+            background-color: #f9f9f9;
+            padding: 2rem;
+        }
+        
+        .suggested-posts h2 {
+            font-size: 24px;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .product-card {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-image {
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-image img:hover {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-category {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        
+        .product-date {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        
+        .product-desc {
+            font-size: 14px;
+            line-height: 1.4;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        .read-more {
+            color: #333;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+            border-bottom: 1px solid #333;
+        }
+        
+        .promo-info {
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+  .back-button {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            justify-content: center;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }

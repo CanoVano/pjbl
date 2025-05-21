@@ -1,4 +1,3 @@
-
 <?php
 session_start(); // Mulai session
 
@@ -161,6 +160,11 @@ $produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
         transform: translateY(-5px);
     }
 
+    .product-image-link {
+        display: block;
+        cursor: pointer;
+    }
+
     .product-image {
         height: 200px;
         width: 100%;
@@ -320,10 +324,10 @@ $produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
     </div>
 
     <nav class="navbar-center">
-        <a href="./landing.php">Home</a>
-        <a href="./menu.php">Menu</a>
-        <a href="./blog.php">Blog</a>
-        <a href="#">Review</a>
+        <a href="./landing.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'landing.php' ? 'active' : ''; ?>">Home</a>
+        <a href="./menu.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'menu.php' ? 'active' : ''; ?>">Menu</a>
+        <a href="./blog.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'blog.php' ? 'active' : ''; ?>">Blog</a>
+        <a href="./review.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'review.php' ? 'active' : ''; ?>">Review</a>
     </nav>
       
     <div class="navbar-right">
@@ -351,7 +355,9 @@ $produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
     <div class="products">
         <?php while ($row = mysqli_fetch_assoc($produk)) : ?>
         <div class="product-card">
-            <img src="../images/<?= $row['image'] ?>" alt="<?= $row['name'] ?>" class="product-image">
+            <a href="detail_produk.php?id=<?= $row['id'] ?>" class="product-image-link">
+                <img src="../images/<?= $row['image'] ?>" alt="<?= $row['name'] ?>" class="product-image">
+            </a>
             <div class="product-info">
                 <p class="product-price">Rp <?= number_format($row['price'], 0, ',', '.') ?></p>
                 <p class="product-name"><?= $row['name'] ?></p>
@@ -431,17 +437,6 @@ $produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
         msg.textContent = 'Terjadi kesalahan, coba lagi nanti.';
     });
 });
-
-
-    const links = document.querySelectorAll('.navbar-center a');
-    const currentPage = window.location.pathname.split("/").pop(); // Ambil nama file terakhir
-
-    links.forEach(link => {
-        const href = link.getAttribute('href').split("/").pop(); // Ambil nama file terakhir juga
-        if (href === currentPage) {
-            link.classList.add('active');
-        }
-    });
 </script>
   
 </body>
