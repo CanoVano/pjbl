@@ -1,5 +1,20 @@
 <?php
+session_start(); // Start session
 include 'koneksi.php'; // Pastikan path ke file koneksi.php sudah benar
+
+// Load user's cart from database if logged in
+if (isset($_SESSION['user'])) {
+    $user_id = $_SESSION['user']['id'];
+    $cart_query = mysqli_query($koneksi, "SELECT product_id, quantity FROM user_carts WHERE user_id = $user_id");
+    
+    // Initialize session cart
+    $_SESSION['cart'] = [];
+    
+    // Load cart items from database into session
+    while ($item = mysqli_fetch_assoc($cart_query)) {
+        $_SESSION['cart'][$item['product_id']] = $item['quantity'];
+    }
+}
 
 // Mengambil ID blog dari URL
 $blog_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -44,15 +59,15 @@ $suggested_result = mysqli_query($koneksi, $suggested_query);
             <img src="../images/log.png" alt="Hexagon Mart">
         </div>
     
-        <nav class="navbar-center">
-            <a href="./landing.php">Home</a>
-            <a href="./menu.php">Menu</a>
-            <a href="./blog.php">Blog</a>
-            <a href="#">Review</a>
-        </nav>
+    <nav class="navbar-center">
+        <a href="./landing.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'landing.php' ? 'active' : ''; ?>">Home</a>
+        <a href="./menu.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'menu.php' ? 'active' : ''; ?>">Menu</a>
+        <a href="./blog.php" class="<?php echo strpos(basename($_SERVER['PHP_SELF']), 'blog') !== false ? 'active' : ''; ?>">Blog</a>
+        <a href="./review.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'review.php' ? 'active' : ''; ?>">Review</a>
+    </nav>
           
         <div class="navbar-right">
-            <a href="#">🛒<span id="cart-count">0</span></a>
+            <a href="cart.php">🛒<span id="cart-count"><?= array_sum($_SESSION['cart'] ?? []) ?></span></a>
             <a href="profil.php">👤</a>
         </div>
     </header>
@@ -95,5 +110,17 @@ $suggested_result = mysqli_query($koneksi, $suggested_query);
             <?php endwhile; ?>
         </div>
     </section>
+    <script>
+        // Active navigation link
+        const links = document.querySelectorAll('.navbar-center a');
+        const currentPage = window.location.pathname.split("/").pop(); // Get the last file name
+
+        links.forEach(link => {
+            const href = link.getAttribute('href').split("/").pop(); // Get the last file name too
+            if (href === currentPage) {
+                link.classList.add('active');
+            }
+        });
+    </script>
 </body>
 </html>

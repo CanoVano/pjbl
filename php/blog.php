@@ -1,6 +1,21 @@
 <?php
 session_start(); // Start session
 include 'koneksi.php'; // Pastikan path ke file koneksi.php sudah benar
+
+// Load user's cart from database if logged in
+if (isset($_SESSION['user'])) {
+    $user_id = $_SESSION['user']['id'];
+    $cart_query = mysqli_query($koneksi, "SELECT product_id, quantity FROM user_carts WHERE user_id = $user_id");
+    
+    // Initialize session cart
+    $_SESSION['cart'] = [];
+    
+    // Load cart items from database into session
+    while ($item = mysqli_fetch_assoc($cart_query)) {
+        $_SESSION['cart'][$item['product_id']] = $item['quantity'];
+    }
+}
+
 // Query untuk mengambil featured blog post
 $featured_query = "SELECT bp.*, bc.name as category_name 
                   FROM blog_posts bp 
@@ -48,7 +63,7 @@ $popular_posts_result = mysqli_query($koneksi, $popular_posts_query);
     <nav class="navbar-center">
         <a href="./landing.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'landing.php' ? 'active' : ''; ?>">Home</a>
         <a href="./menu.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'menu.php' ? 'active' : ''; ?>">Menu</a>
-        <a href="./blog.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'blog.php' ? 'active' : ''; ?>">Blog</a>
+        <a href="./blog.php" class="<?php echo strpos(basename($_SERVER['PHP_SELF']), 'blog') !== false ? 'active' : ''; ?>">Blog</a>
         <a href="./review.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'review.php' ? 'active' : ''; ?>">Review</a>
     </nav>
       

@@ -5,22 +5,47 @@ include 'koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
     $product_id = $_POST['product_id'];
+    $user_id = $_SESSION['user']['id'];
 
-    // Jika session cart belum ada, buat array baru
+    // Check if product already exists in user's cart
+    $check_query = mysqli_query($koneksi, "SELECT * FROM user_carts WHERE user_id = $user_id AND product_id = $product_id");
+    
+    if (mysqli_num_rows($check_query) > 0) {
+        // Update quantity if product exists
+        mysqli_query($koneksi, "UPDATE user_carts SET quantity = quantity + 1 WHERE user_id = $user_id AND product_id = $product_id");
+    } else {
+        // Insert new product if it doesn't exist
+        mysqli_query($koneksi, "INSERT INTO user_carts (user_id, product_id, quantity) VALUES ($user_id, $product_id, 1)");
+    }
+
+    // Also update session cart for immediate display
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
-
-    // Jika produk sudah ada di cart, tambah jumlahnya
+    
     if (isset($_SESSION['cart'][$product_id])) {
-    $_SESSION['cart'][$product_id] += 1; // Tambah jumlah produk
-} else {
-    $_SESSION['cart'][$product_id] = 1; // Inisialisasi dengan 1
-}
+        $_SESSION['cart'][$product_id] += 1;
+    } else {
+        $_SESSION['cart'][$product_id] = 1;
+    }
 
-    // Redirect supaya form tidak submit ulang jika refresh page
+    // Redirect to prevent form resubmission on page refresh
     header("Location: landing.php");
     exit;
+}
+
+// Load user's cart from database if logged in
+if (isset($_SESSION['user'])) {
+    $user_id = $_SESSION['user']['id'];
+    $cart_query = mysqli_query($koneksi, "SELECT product_id, quantity FROM user_carts WHERE user_id = $user_id");
+    
+    // Initialize session cart
+    $_SESSION['cart'] = [];
+    
+    // Load cart items from database into session
+    while ($item = mysqli_fetch_assoc($cart_query)) {
+        $_SESSION['cart'][$item['product_id']] = $item['quantity'];
+    }
 }
 
 $produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
@@ -32,288 +57,8 @@ $produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hexagon Mart</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="">
-    <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Poppins', sans-serif;
-        color: #333;
-    }
-
-
-    /* Navbar */
-    .navbar {
-        background: #F6AB0E;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 40px;
-    }
-
-    .navbar .logo img {
-        height: 60px;
-    } 
-
-    .navbar-center {
-        display: flex;
-        gap: 20px;
-    }
-
-    .navbar-center a {
-        text-decoration: none;
-        color: black;
-        font-weight: 500;
-        padding: 10px;
-    }
-
-    .navbar-right {
-        display: flex;
-        gap: 15px;
-    }
-
-    .navbar-right a {
-        text-decoration: none;
-        font-size: 20px;
-        color: black;
-    }
-
-    .navbar-center a.active {
-        font-weight: bold;
-        border-bottom: 2px solid black;
-    }  
-
-    /* Hero */
-    .hero {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 50px;
-        padding: 60px 40px;
-    }
-
-
-    .hero-text h3 {
-        font-weight: normal;
-    }
-
-    .hero-text h1 {
-        font-size: 2.5em;
-    }
-
-    .hero-text span {
-        color: purple;
-    }
-
-    .hero-text p {
-        margin: 20px 0;
-    }
-
-    .hero-text button {
-        padding: 10px 20px;
-        background: lightgray;
-        border: none;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .hero-image img.circle-image {
-        width: 300px;
-        height: 300px;
-        object-fit: center;
-        border-radius: 50%;
-    }
-
-    /* Featured Products */
-    .featured-products {
-        text-align: center;
-        padding: 50px 20px;
-    }
-
-    .featured-products h2 {
-        margin-bottom: 30px;
-    }
-
-    .products {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-    }
-
-    .product-card {
-        max-width: 250px;
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .product-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .product-image-link {
-        display: block;
-        cursor: pointer;
-    }
-
-    .product-image {
-        height: 200px;
-        width: 100%;
-        object-fit: contain;
-        border-radius: 10px;
-    }
-
-    .product-info {
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-    }
-
-    .product-price {
-        font-size: 18px;
-        font-weight: bold;
-        color: #1a8917;
-        margin-bottom: 5px;
-    }
-
-    .product-name {
-        font-size: 16px;
-        margin-bottom: 10px;
-    }
-
-    .add-to-cart {
-        background-color: #A0E7A0;
-        color: black;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: background-color 0.3s ease;
-    }
-
-    .add-to-cart:hover {
-        background-color: #8ad98a;
-    }
-
-    .view-all {
-        margin-top: 30px;
-        padding: 10px 20px;
-        background: white;
-        border: 1px solid black;
-        cursor: pointer;
-    }
-
-    /* Newsletter */
-    .newsletter {
-        background: #333;
-        color: white;
-        padding: 60px 20px;
-        text-align: center;
-    }
-
-    .newsletter-form {
-        margin: 20px 0;
-    }
-
-    .newsletter-form input {
-        padding: 10px;
-        width: 250px;
-        margin-right: 10px;
-    }
-
-    .newsletter-form button {
-        padding: 10px 20px;
-        background: transparent;
-        color: white;
-        border: 1px solid white;
-        cursor: pointer;
-    }
-
-    .small-text {
-        font-size: 0.8em;
-        margin-top: 10px;
-    }
-
-    /* Footer */
-    .footer {
-        background: #f5f5f5;
-        text-align: center;
-        padding: 40px 20px;
-    }
-
-    .footer-logo img {
-        height: 100px;
-        margin-bottom: 20px;
-    }
-
-    .footer-links {
-        margin-bottom: 20px;
-    }
-
-    .footer-links a {
-        margin: 0 10px;
-        text-decoration: none;
-        color: black;
-    }
-
-    .social-icons {
-        display: flex;
-        gap: 20px;
-        justify-content: center;
-        margin-top: 20px;
-    }
-
-    .social-icons a {
-        font-size: 24px;
-        color: #000;
-        transition: color 0.3s;
-    }
-
-    .social-icons a:hover {
-        color: #6c63ff;
-    }
-
-    .copyright {
-        text-align: center;
-        margin-top: 20px;
-        border-top: 3px solid #000;
-        padding-top: 10px;
-    }
-
-    .floating-info-button {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 45px;
-        height: 45px;
-        background-color: #ffffff;
-        border-radius: 50%;
-        border: 2px solid #ccc;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        cursor: pointer;
-        z-index: 999;
-        transition: background-color 0.3s;
-    }
-
-    .floating-info-button:hover {
-        background-color: #f0f0f0;
-    }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/home.css">
 </head>
 <body>
 
@@ -361,7 +106,7 @@ $produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
             <div class="product-info">
                 <p class="product-price">Rp <?= number_format($row['price'], 0, ',', '.') ?></p>
                 <p class="product-name"><?= $row['name'] ?></p>
-                <form method="POST" action="">
+                <form method="POST" action="" class="add-to-cart-form">
                     <input type="hidden" name="product_id" value="<?= $row['id'] ?>">
                     <button type="submit" class="add-to-cart">tambah</button>
                 </form>     
@@ -437,6 +182,42 @@ $produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
         msg.textContent = 'Terjadi kesalahan, coba lagi nanti.';
     });
 });
+
+    // Add to cart AJAX
+    document.querySelectorAll('.add-to-cart-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('add_to_cart.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    // Update cart count
+                    const cartCount = document.getElementById('cart-count');
+                    cartCount.textContent = data.cart_count;
+                    
+                    // Optional: Show success message
+                    const button = this.querySelector('.add-to-cart');
+                    const originalText = button.textContent;
+                    button.textContent = 'Ditambahkan!';
+                    button.style.backgroundColor = '#4CAF50';
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.backgroundColor = '';
+                    }, 1000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
 </script>
   
 </body>

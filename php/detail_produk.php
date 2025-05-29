@@ -13,37 +13,55 @@ $result = mysqli_query($koneksi, $query);
 if (mysqli_num_rows($result) > 0) {
     $product = mysqli_fetch_assoc($result);
 } else {
-    // Fallback to default products if not found in database
-    $products = [
-        1 => ["name" => "Ayam Goreng Sambal", "price" => 15000, "image" => "../images/yu.png", "description" => "Produk ini dibuat dari ayam pilihan berkualitas tinggi dari peternakan terbaik, diolah secara higienis dan disukai oleh banyak orang."],
-        2 => ["name" => "Ayam Goreng", "price" => 16000, "image" => "../images/yu.png", "description" => "Produk ini dibuat dari ayam pilihan berkualitas tinggi dari peternakan terbaik, diolah secara higienis dan disukai oleh banyak orang."],
-        3 => ["name" => "Mie Goreng", "price" => 18000, "image" => "../images/yu.png", "description" => "Produk ini dibuat dari bahan-bahan berkualitas tinggi, diolah secara higienis dan disukai oleh banyak orang."],
-        4 => ["name" => "Mie Kuah", "price" => 14000, "image" => "../images/yu.png", "description" => "Produk ini dibuat dari bahan-bahan berkualitas tinggi, diolah secara higienis dan disukai oleh banyak orang."],
-        5 => ["name" => "Sayur Kuah", "price" => 28000, "image" => "../images/yu.png", "description" => "Produk ini dibuat dari sayuran segar berkualitas tinggi, diolah secara higienis dan disukai oleh banyak orang."],
-        6 => ["name" => "Nasi Goreng", "price" => 23000, "image" => "../images/yu.png", "description" => "Produk ini dibuat dari beras berkualitas tinggi, diolah secara higienis dan disukai oleh banyak orang."],
-        7 => ["name" => "Kwetiau", "price" => 20000, "image" => "../images/yu.png", "description" => "Produk ini dibuat dari bahan-bahan berkualitas tinggi, diolah secara higienis dan disukai oleh banyak orang."]
-    ];
-
-    $product = $products[$product_id] ?? $products[1]; // Default to first product if ID not found
+    // If product not found, redirect to menu page
+    header("Location: menu.php");
+    exit;
 }
 
 // Add to cart functionality
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
-    // If session cart doesn't exist, create a new array
+    $user_id = $_SESSION['user']['id'];
+    $quantity = $_POST['quantity'];
+
+    // Check if product already exists in user's cart
+    $check_query = mysqli_query($koneksi, "SELECT * FROM user_carts WHERE user_id = $user_id AND product_id = $product_id");
+    
+    if (mysqli_num_rows($check_query) > 0) {
+        // Update quantity if product exists
+        mysqli_query($koneksi, "UPDATE user_carts SET quantity = quantity + $quantity WHERE user_id = $user_id AND product_id = $product_id");
+    } else {
+        // Insert new product if it doesn't exist
+        mysqli_query($koneksi, "INSERT INTO user_carts (user_id, product_id, quantity) VALUES ($user_id, $product_id, $quantity)");
+    }
+
+    // Also update session cart for immediate display
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
-
-    // If product already exists in cart, increase the quantity
+    
     if (isset($_SESSION['cart'][$product_id])) {
-        $_SESSION['cart'][$product_id] += $_POST['quantity']; // Increase by selected quantity
+        $_SESSION['cart'][$product_id] += $quantity;
     } else {
-        $_SESSION['cart'][$product_id] = $_POST['quantity']; // Initialize with selected quantity
+        $_SESSION['cart'][$product_id] = $quantity;
     }
 
     // Redirect to prevent form resubmission
     header("Location: detail_produk.php?id=" . $product_id . "&added=1");
     exit;
+}
+
+// Load user's cart from database if logged in
+if (isset($_SESSION['user'])) {
+    $user_id = $_SESSION['user']['id'];
+    $cart_query = mysqli_query($koneksi, "SELECT product_id, quantity FROM user_carts WHERE user_id = $user_id");
+    
+    // Initialize session cart
+    $_SESSION['cart'] = [];
+    
+    // Load cart items from database into session
+    while ($item = mysqli_fetch_assoc($cart_query)) {
+        $_SESSION['cart'][$item['product_id']] = $item['quantity'];
+    }
 }
 ?>
 <!DOCTYPE html>

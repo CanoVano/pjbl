@@ -1,0 +1,280 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+}
+
+
+/* Navbar */
+.navbar {
+    background: #F6AB0E;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 40px;
+}
+
+.navbar .logo img {
+    height: 60px;
+} 
+
+.navbar-center {
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-center a {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    padding: 10px;
+}
+
+.navbar-right {
+    display: flex;
+    gap: 15px;
+}
+
+.navbar-right a {
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+}
+
+.navbar-center a.active {
+    font-weight: bold;
+    border-bottom: 2px solid black;
+}  
+
+.navbar .navbar-center a:hover {
+    border-bottom: 2px solid black;
+}
+/* Hero */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    padding: 60px 40px;
+}
+
+
+.hero-text h3 {
+    font-weight: normal;
+}
+
+.hero-text h1 {
+    font-size: 2.5em;
+}
+
+.hero-text span {
+    color: purple;
+}
+
+.hero-text p {
+    margin: 20px 0;
+}
+
+.hero-text button {
+    padding: 10px 20px;
+    background: lightgray;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.hero-image img.circle-image {
+    width: 300px;
+    height: 300px;
+    object-fit: center;
+    border-radius: 50%;
+}
+
+/* Featured Products */
+.featured-products {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.featured-products h2 {
+    margin-bottom: 30px;
+}
+
+.products {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.product-card {
+    max-width: 250px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-image-link {
+    display: block;
+    cursor: pointer;
+}
+
+.product-image {
+    height: 200px;
+    width: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.product-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.product-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1a8917;
+    margin-bottom: 5px;
+}
+
+.product-name {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.add-to-cart {
+    background-color: #A0E7A0;
+    color: black;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+
+
+.view-all {
+    margin-top: 30px;
+    padding: 10px 20px;
+    background: white;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+/* Newsletter */
+.newsletter {
+    background: #333;
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.newsletter-form {
+    margin: 20px 0;
+}
+
+.newsletter-form input {
+    padding: 10px;
+    width: 250px;
+    margin-right: 10px;
+}
+
+.newsletter-form button {
+    padding: 10px 20px;
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    cursor: pointer;
+}
+
+.small-text {
+    font-size: 0.8em;
+    margin-top: 10px;
+}
+
+/* Footer */
+.footer {
+    background: #f5f5f5;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.footer-logo img {
+    height: 100px;
+    margin-bottom: 20px;
+}
+
+.footer-links {
+    margin-bottom: 20px;
+}
+
+.footer-links a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.social-icons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.social-icons a {
+    font-size: 24px;
+    color: #000;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #6c63ff;
+}
+
+.copyright {
+    text-align: center;
+    margin-top: 20px;
+    border-top: 3px solid #000;
+    padding-top: 10px;
+}
+
+.floating-info-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 999;
+    transition: background-color 0.3s;
+}
+
+.floating-info-button:hover {
+    background-color: #f0f0f0;
+}

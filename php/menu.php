@@ -5,23 +5,54 @@ include 'koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
     $product_id = $_POST['product_id'];
+    $user_id = $_SESSION['user']['id'];
 
-    // If session cart doesn't exist, create a new array
+    // Check if product already exists in user's cart
+    $check_query = mysqli_query($koneksi, "SELECT * FROM user_carts WHERE user_id = $user_id AND product_id = $product_id");
+    
+    if (mysqli_num_rows($check_query) > 0) {
+        // Update quantity if product exists
+        mysqli_query($koneksi, "UPDATE user_carts SET quantity = quantity + 1 WHERE user_id = $user_id AND product_id = $product_id");
+    } else {
+        // Insert new product if it doesn't exist
+        mysqli_query($koneksi, "INSERT INTO user_carts (user_id, product_id, quantity) VALUES ($user_id, $product_id, 1)");
+    }
+
+    // Also update session cart for immediate display
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
-
-    // If product already exists in cart, increase the quantity
+    
     if (isset($_SESSION['cart'][$product_id])) {
-        $_SESSION['cart'][$product_id] += 1; // Increase product quantity
+        $_SESSION['cart'][$product_id] += 1;
     } else {
-        $_SESSION['cart'][$product_id] = 1; // Initialize with 1
+        $_SESSION['cart'][$product_id] = 1;
     }
 
     // Redirect to prevent form resubmission on page refresh
     header("Location: menu.php");
     exit;
 }
+
+// Load user's cart from database if logged in
+if (isset($_SESSION['user'])) {
+    $user_id = $_SESSION['user']['id'];
+    $cart_query = mysqli_query($koneksi, "SELECT product_id, quantity FROM user_carts WHERE user_id = $user_id");
+    
+    // Initialize session cart
+    $_SESSION['cart'] = [];
+    
+    // Load cart items from database into session
+    while ($item = mysqli_fetch_assoc($cart_query)) {
+        $_SESSION['cart'][$item['product_id']] = $item['quantity'];
+    }
+}
+
+// Fetch featured products (terlaris minggu ini)
+$featured_products = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
+
+// Fetch all products (aneka kuliner)
+$all_products = mysqli_query($koneksi, "SELECT * FROM products LIMIT 4");
 
 // Product data array for descriptions - this will be used in detail_produk.php
 $product_descriptions = [
@@ -312,45 +343,21 @@ body {
         <section class="featured-products">
             <h2 class="section-title">Terlaris minggu ini</h2>
             <div class="products">
+                <?php while ($row = mysqli_fetch_assoc($featured_products)) : ?>
                 <div class="product-card">
-                    <a href="detail_produk.php?id=1">
-                        <img src="../images/yu.png" alt="Ayam Goreng Sambal" class="product-image">
+                    <a href="detail_produk.php?id=<?= $row['id'] ?>">
+                        <img src="../images/<?= $row['image'] ?>" alt="<?= $row['name'] ?>" class="product-image">
                     </a>
                     <div class="product-info">
-                        <p class="product-price">Rp 15.000</p>
-                        <p class="product-name">Ayam Goreng Sambal Spesial dengan nasi putih</p>
-                        <form method="POST" action="">
-                            <input type="hidden" name="product_id" value="1">
+                        <p class="product-price">Rp <?= number_format($row['price'], 0, ',', '.') ?></p>
+                        <p class="product-name"><?= $row['name'] ?></p>
+                        <form method="POST" action="" class="add-to-cart-form">
+                            <input type="hidden" name="product_id" value="<?= $row['id'] ?>">
                             <button type="submit" class="add-to-cart">tambah</button>
                         </form>
                     </div>
                 </div>
-                <div class="product-card">
-                    <a href="detail_produk.php?id=2">
-                        <img src="../images/yu.png" alt="Ayam Goreng" class="product-image">
-                    </a>
-                    <div class="product-info">
-                        <p class="product-price">Rp 16.000</p>
-                        <p class="product-name">Ayam goreng + nasi putih dan sambal kecap manis</p>
-                        <form method="POST" action="">
-                            <input type="hidden" name="product_id" value="2">
-                            <button type="submit" class="add-to-cart">tambah</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <a href="detail_produk.php?id=3">
-                        <img src="../images/yu.png" alt="Mie Goreng" class="product-image">
-                    </a>
-                    <div class="product-info">
-                        <p class="product-price">Rp 18.000</p>
-                        <p class="product-name">Mie goreng istimewa paket super dan sayuran yang segar</p>
-                        <form method="POST" action="">
-                            <input type="hidden" name="product_id" value="3">
-                            <button type="submit" class="add-to-cart">tambah</button>
-                        </form>
-                    </div>
-                </div>
+                <?php endwhile; ?>
             </div>
         </section>
 
@@ -392,58 +399,21 @@ body {
         <section class="featured-products">
             <h2 class="section-title">Aneka kuliner</h2>
             <div class="products">
+                <?php while ($row = mysqli_fetch_assoc($all_products)) : ?>
                 <div class="product-card">
-                    <a href="detail_produk.php?id=4">
-                        <img src="../images/yu.png" alt="Mie Kuah" class="product-image">
+                    <a href="detail_produk.php?id=<?= $row['id'] ?>">
+                        <img src="../images/<?= $row['image'] ?>" alt="<?= $row['name'] ?>" class="product-image">
                     </a>
                     <div class="product-info">
-                        <p class="product-price">Rp 14.000</p>
-                        <p class="product-name">Mie kuah Jawa dengan rasa dan tekstur mantap yang menggugah</p>
-                        <form method="POST" action="">
-                            <input type="hidden" name="product_id" value="4">
+                        <p class="product-price">Rp <?= number_format($row['price'], 0, ',', '.') ?></p>
+                        <p class="product-name"><?= $row['name'] ?></p>
+                        <form method="POST" action="" class="add-to-cart-form">
+                            <input type="hidden" name="product_id" value="<?= $row['id'] ?>">
                             <button type="submit" class="add-to-cart">tambah</button>
                         </form>
                     </div>
                 </div>
-                <div class="product-card">
-                    <a href="detail_produk.php?id=5">
-                        <img src="../images/yu.png" alt="Sayur Kuah" class="product-image">
-                    </a>
-                    <div class="product-info">
-                        <p class="product-price">Rp 28.000</p>
-                        <p class="product-name">Sayur kuah kental dari olahan jamu mentah dengan racikan saus daerah</p>
-                        <form method="POST" action="">
-                            <input type="hidden" name="product_id" value="5">
-                            <button type="submit" class="add-to-cart">tambah</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <a href="detail_produk.php?id=6">
-                        <img src="../images/yu.png" alt="Nasi Goreng" class="product-image">
-                    </a>
-                    <div class="product-info">
-                        <p class="product-price">Rp 23.000</p>
-                        <p class="product-name">Nasi goreng spesial kampung yang sangat istimewa</p>
-                        <form method="POST" action="">
-                            <input type="hidden" name="product_id" value="6">
-                            <button type="submit" class="add-to-cart">tambah</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <a href="detail_produk.php?id=7">
-                        <img src="../images/yu.png" alt="Kwetiau" class="product-image">
-                    </a>
-                    <div class="product-info">
-                        <p class="product-price">Rp 20.000</p>
-                        <p class="product-name">Kwetiau goreng seafood dengan tambahan bahan-bahan seafood yang fresh</p>
-                        <form method="POST" action="">
-                            <input type="hidden" name="product_id" value="7">
-                            <button type="submit" class="add-to-cart">tambah</button>
-                        </form>
-                    </div>
-                </div>
+                <?php endwhile; ?>
             </div>
         </section>
     </div>
@@ -458,7 +428,7 @@ body {
 
         // Update the banner position
         function updateSlider() {
-            wrapper.style.transform = translateX(-${currentIndex * 100}%);
+            wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
             dots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentIndex);
             });
@@ -485,13 +455,49 @@ body {
 
         // Active navigation link
         const links = document.querySelectorAll('.navbar-center a');
-        const currentPage = window.location.pathname.split("/").pop(); // Get the last file name
+        const currentPage = window.location.pathname.split("/").pop();
 
         links.forEach(link => {
-            const href = link.getAttribute('href').split("/").pop(); // Get the last file name too
+            const href = link.getAttribute('href').split("/").pop();
             if (href === currentPage) {
                 link.classList.add('active');
             }
+        });
+
+        // Add to cart AJAX
+        document.querySelectorAll('.add-to-cart-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                
+                fetch('add_to_cart.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        // Update cart count
+                        const cartCount = document.getElementById('cart-count');
+                        cartCount.textContent = data.cart_count;
+                        
+                        // Show success message
+                        const button = this.querySelector('.add-to-cart');
+                        const originalText = button.textContent;
+                        button.textContent = 'Ditambahkan!';
+                        button.style.backgroundColor = '#4CAF50';
+                        
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                            button.style.backgroundColor = '';
+                        }, 1000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
         });
     </script>
 </body>

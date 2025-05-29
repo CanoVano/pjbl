@@ -25,10 +25,17 @@ if (isset($_POST['klaim_voucher'])) {
 // Proses menghapus item dari keranjang
 if (isset($_POST['remove_item'])) {
     $product_id = $_POST['product_id'];
+    $user_id = $_SESSION['user']['id'];
+    
+    // Update database
     if (isset($_SESSION['cart'][$product_id])) {
         if ($_SESSION['cart'][$product_id] > 1) {
+            // Decrease quantity in database
+            mysqli_query($koneksi, "UPDATE user_carts SET quantity = quantity - 1 WHERE user_id = $user_id AND product_id = $product_id");
             $_SESSION['cart'][$product_id]--;
         } else {
+            // Remove item from database
+            mysqli_query($koneksi, "DELETE FROM user_carts WHERE user_id = $user_id AND product_id = $product_id");
             unset($_SESSION['cart'][$product_id]);
         }
     }
@@ -39,7 +46,20 @@ if (isset($_POST['remove_item'])) {
 // Proses menambah item ke keranjang
 if (isset($_POST['add_recommendation'])) {
     $product_id = $_POST['product_id'];
+    $user_id = $_SESSION['user']['id'];
     
+    // Check if product already exists in user's cart
+    $check_query = mysqli_query($koneksi, "SELECT * FROM user_carts WHERE user_id = $user_id AND product_id = $product_id");
+    
+    if (mysqli_num_rows($check_query) > 0) {
+        // Update quantity if product exists
+        mysqli_query($koneksi, "UPDATE user_carts SET quantity = quantity + 1 WHERE user_id = $user_id AND product_id = $product_id");
+    } else {
+        // Insert new product if it doesn't exist
+        mysqli_query($koneksi, "INSERT INTO user_carts (user_id, product_id, quantity) VALUES ($user_id, $product_id, 1)");
+    }
+    
+    // Update session cart
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
@@ -52,6 +72,20 @@ if (isset($_POST['add_recommendation'])) {
     
     header("Location: " . $_SERVER['PHP_SELF']);
     exit();
+}
+
+// Load user's cart from database if logged in
+if (isset($_SESSION['user'])) {
+    $user_id = $_SESSION['user']['id'];
+    $cart_query = mysqli_query($koneksi, "SELECT product_id, quantity FROM user_carts WHERE user_id = $user_id");
+    
+    // Initialize session cart
+    $_SESSION['cart'] = [];
+    
+    // Load cart items from database into session
+    while ($item = mysqli_fetch_assoc($cart_query)) {
+        $_SESSION['cart'][$item['product_id']] = $item['quantity'];
+    }
 }
 
 $voucher_diklaim_saat_ini = $_SESSION['voucher_diklaim'] ?? null;

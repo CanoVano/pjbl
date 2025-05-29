@@ -2,6 +2,34 @@
 include '../php/koneksi.php';
 session_start();
 
+// Function to mask phone number
+function maskPhoneNumber($phone) {
+    if (empty($phone)) return '-';
+    
+    // Remove any non-numeric characters
+    $phone = preg_replace('/[^0-9]/', '', $phone);
+    
+    // If number starts with 0, replace with 62
+    if (substr($phone, 0, 1) === '0') {
+        $phone = '62' . substr($phone, 1);
+    }
+    
+    // If number doesn't start with 62, add it
+    if (substr($phone, 0, 2) !== '62') {
+        $phone = '62' . $phone;
+    }
+    
+    // Get first and last digit
+    $firstDigit = substr($phone, 2, 1);
+    $lastDigit = substr($phone, -1);
+    
+    // Count stars needed (length - 4 for +62, first digit, and last digit)
+    $starCount = strlen($phone) - 4;
+    
+    // Format the number
+    return '+62 ' . $firstDigit . str_repeat('*', $starCount) . $lastDigit;
+}
+
 // Check if user is logged in
 if (!isset($_SESSION['user'])) {
     header("Location: ../php/login.php");
@@ -219,7 +247,7 @@ $_SESSION['user'] = $current_user;
         </div>
         
         <div class="info-box">
-            <p>No Telepon : <?php echo $current_user['telepon'] ?? '-'; ?></p>
+            <p>No Telepon : <?php echo maskPhoneNumber($current_user['telepon']); ?></p>
         </div>
         
         <div class="info-box">
@@ -227,7 +255,7 @@ $_SESSION['user'] = $current_user;
         </div>
         
         <div class="button-container">
-            <a href="login.php" class="logout-btn">Logout</a>
+            <a href="logout.php" class="logout-btn">Logout</a>
         </div>
     </div>
 

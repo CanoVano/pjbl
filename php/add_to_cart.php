@@ -1,32 +1,48 @@
 <?php
 session_start();
-include 'koneksi.php'; // Pastikan file ini benar dan koneksi menggunakan variabel $koneksi
+include 'koneksi.php';
 
-// Cek apakah user sudah login
+header('Content-Type: application/json');
+
 if (!isset($_SESSION['user'])) {
-    echo "<script>alert('Silakan login terlebih dahulu.'); window.location.href='../login.php';</script>";
+    echo json_encode(['success' => false, 'message' => 'User not logged in']);
     exit;
 }
 
-// Cek apakah product_id dikirim lewat POST
-if (isset($_POST['product_id'])) {
-    $product_id = intval($_POST['product_id']); // Amankan input
-    $user_id = $_SESSION['user']['id']; // Pastikan 'id' sesuai dengan struktur $_SESSION['user']
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
+    $product_id = $_POST['product_id'];
+    $user_id = $_SESSION['user']['id'];
 
-    // Cek apakah produk sudah ada di cart
-    $check = mysqli_query($koneksi, "SELECT * FROM cart WHERE user_id=$user_id AND product_id=$product_id");
-
-    if (mysqli_num_rows($check) > 0) {
-        // Jika sudah ada, tambahkan quantity-nya
-        mysqli_query($koneksi, "UPDATE cart SET quantity = quantity + 1 WHERE user_id=$user_id AND product_id=$product_id");
+    // Check if product already exists in user's cart
+    $check_query = mysqli_query($koneksi, "SELECT * FROM user_carts WHERE user_id = $user_id AND product_id = $product_id");
+    
+    if (mysqli_num_rows($check_query) > 0) {
+        // Update quantity if product exists
+        mysqli_query($koneksi, "UPDATE user_carts SET quantity = quantity + 1 WHERE user_id = $user_id AND product_id = $product_id");
     } else {
-        // Jika belum ada, insert ke cart
-        mysqli_query($koneksi, "INSERT INTO cart (user_id, product_id, quantity) VALUES ($user_id, $product_id, 1)");
+        // Insert new product if it doesn't exist
+        mysqli_query($koneksi, "INSERT INTO user_carts (user_id, product_id, quantity) VALUES ($user_id, $product_id, 1)");
     }
 
-    header("Location: ./landing.php");
-    exit;
+    // Update session cart
+    if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = [];
+    }
+    
+    if (isset($_SESSION['cart'][$product_id])) {
+        $_SESSION['cart'][$product_id] += 1;
+    } else {
+        $_SESSION['cart'][$product_id] = 1;
+    }
+
+    // Get total cart count
+    $cart_count = array_sum($_SESSION['cart']);
+
+    echo json_encode([
+        'success' => true,
+        'message' => 'Product added to cart',
+        'cart_count' => $cart_count
+    ]);
 } else {
-    echo "<script>alert('Produk tidak ditemukan.'); window.location.href='./landing.php';</script>";
-    exit;
+    echo json_encode(['success' => false, 'message' => 'Invalid request']);
 }

@@ -58,6 +58,10 @@ body {
     border-bottom: 2px solid black;
   }  
 
+  .navbar .navbar-center a:hover {
+    border-bottom: 2px solid black;
+}
+
 /* Product section styling */
 .featured-products {
     margin-top: 30px;
@@ -95,6 +99,7 @@ body {
     width: 100%;
     object-fit: contain;
     border-radius: 8px;
+    cursor: pointer; /* Add cursor pointer to indicate clickable */
 }
 
 .product-info {
@@ -131,8 +136,6 @@ body {
 .add-to-cart:hover {
     background-color: #8ad98a;
 }
-
-/* Cart animation removed */
 
 /* Banner styling */
 .banner-container {
