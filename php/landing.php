@@ -87,7 +87,8 @@ $produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
         <h3>HEXAGON-MART</h3>
         <h1>Super value deals<br><span>On all products</span></h1>
         <p>Save more with coupons & up to 30% off</p>
-        <button>Shop Now</button>
+        <button onclick="window.location.href='menu.php'">Shop Now</button>
+
     </div>
     <div class="hero-image">
         <img src="../images/yy.webp" alt="Makanan" class="circle-image">
