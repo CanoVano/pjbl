@@ -253,6 +253,10 @@ $_SESSION['user'] = $current_user;
         <div class="info-box">
             <p>Email : <?php echo $current_user['email']; ?></p>
         </div>
+
+        <div class="info-box">
+            <p>Riwayat Pesanan : <?php echo $current_user['RiwayatPesanan']; ?></p>
+        </div>
         
         <div class="button-container">
             <a href="logout.php" class="logout-btn">Logout</a>

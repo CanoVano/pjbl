@@ -548,7 +548,11 @@ while ($row = mysqli_fetch_assoc($query_rekomendasi)) {
             </div>
 
             <div class="checkout-button-container">
-                <button class="checkout-button">Checkout</button>
+                <form action="checkout.php" method="GET">
+                    <input type="hidden" name="cart_data" value="<?php echo htmlspecialchars(json_encode($cart_items)); ?>">
+                    <input type="hidden" name="total_price" value="<?php echo $harga_setelah_diskon; ?>">
+                    <button type="submit" class="checkout-button">Checkout</button>
+                </form>
             </div>
         <?php endif; ?>
     </div>

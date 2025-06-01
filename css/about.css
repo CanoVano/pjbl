@@ -1,0 +1,220 @@
+/* Reset dasar */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Tampilan umum */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  color: #333;
+}
+
+/* App Bar */
+.app-bar {
+  background-color: orange;
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  color: black;
+}
+
+.app-bar .back-icon {
+  margin-right: 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* Main Section */
+main {
+  padding: 16px;
+}
+
+/* Judul Toko */
+.store-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+/* Map Box */
+.map-box {
+  width: 100%;
+  max-width: 400px;
+  height: 160px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.map-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Info Alamat & Jam */
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  border-top: 1px solid #ccc;
+  padding: 12px 0;
+  gap: 10px;
+}
+
+.info-item:first-of-type {
+  border-top: none;
+}
+
+.info-item i {
+  font-size: 18px;
+  color: green;
+  margin-top: 4px;
+}
+
+/* About Us */
+.about-us {
+  text-align: center;
+  padding: 30px 16px;
+}
+
+.about-us h2 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+/* Modal image styling */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  padding-top: 60px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  max-width: 90%;
+  max-height: 80vh;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #ead308;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: #ffffff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: #f00;
+}
+
+.modal-caption {
+  text-align: center;
+  color: white;
+  margin-top: 15px;
+}
+
+.modal-caption h3 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.modal-caption p {
+  font-size: 18px;
+  margin: 5px 0 0 0;
+  color: #ccc;
+}
+/* Foto Tim */
+.about-us .team-photos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  justify-items: center;
+  margin: 5px
+}
+.about-us .team-photos img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+/* Bagian Team Section */
+.team-section {
+  background-color: #f5a623;
+  padding: 40px 20px;
+}
+
+.team-container {
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+.team-photo img {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid white;
+}
+
+.team-desc {
+  max-width: 500px;
+  margin-left: 10;
+  margin-top: 15;
+  color: #000000;
+}
+
+.team-desc h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.desc-box {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1.6; 
+  color: #000;
+}
+
+.quote {
+  margin-left: 300px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.heart {
+  color: red;
+  font-size: 18px;
+}

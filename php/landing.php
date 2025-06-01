@@ -132,7 +132,7 @@ $produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
 </section>
 
 <!-- Footer -->
-<div class="floating-info-button">
+<div class="floating-info-button" onclick="window.location.href='./about.php'">
     <i class="fas fa-info"></i>
 </div>
 <footer class="footer">
