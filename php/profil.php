@@ -255,7 +255,7 @@ $_SESSION['user'] = $current_user;
         </div>
 
         <div class="info-box">
-            <p>Riwayat Pesanan : <?php echo $current_user['RiwayatPesanan']; ?></p>
+            <p><a href="riwayat_pesanan.php" style="color: inherit; text-decoration: none;">Riwayat Pesanan</a></p>
         </div>
         
         <div class="button-container">
