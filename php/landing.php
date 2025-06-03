@@ -91,7 +91,7 @@ $produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
 
     </div>
     <div class="hero-image">
-        <img src="../images/yy.webp" alt="Makanan" class="circle-image">
+        <img src="../images/home.jpg" alt="Makanan" class="circle-image">
     </div>
 </section>
 
@@ -140,15 +140,15 @@ $produk = mysqli_query($koneksi, "SELECT * FROM products LIMIT 3");
         <img src="../images/log.png" alt="Hexagon Mart">
     </div>
     <nav class="footer-links">
-        <a href="#">Home</a>
-        <a href="#">Blog</a>
-        <a href="#">About</a>
-        <a href="#">Review</a>
+        <a href="landing.php">Home</a>
+        <a href="bllog.php">Blog</a>
+        <a href="about.php">About</a>
+        <a href="review.php">Review</a>
     </nav>
     <div class="social-icons">
         <a href="#"><i class="fa-brands fa-facebook"></i></a>
         <a href="#"><i class="fa-brands fa-twitter"></i></a>
-        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.instagram.com/vano_fs?igsh=ejIwcmI0NWo2djY3"><i class="fa-brands fa-instagram"></i></a>
     </div>    
     <p class="copyright">
         Copyright Hexagon Mart © 2024. All Right Reserved
