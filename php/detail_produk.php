@@ -420,6 +420,7 @@ if (isset($_SESSION['user'])) {
                 return;
             }
             
+            // Redirect to checkout with product ID and quantity
             window.location.href = `checkout.php?id=${productId}&quantity=${quantity}`;
         }
     </script>

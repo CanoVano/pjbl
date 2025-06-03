@@ -12,6 +12,26 @@ if (!isset($_SESSION['user'])) {
 $cart_data = isset($_GET['cart_data']) ? json_decode(html_entity_decode($_GET['cart_data']), true) : [];
 $total_price = isset($_GET['total_price']) ? (float)$_GET['total_price'] : 0;
 
+// Handle direct purchase (when only product ID and quantity are provided)
+if (isset($_GET['id']) && isset($_GET['quantity'])) {
+    $product_id = (int)$_GET['id'];
+    $quantity = (int)$_GET['quantity'];
+    
+    // Fetch product data from database
+    $product_query = mysqli_query($koneksi, "SELECT * FROM products WHERE id = $product_id");
+    if ($product = mysqli_fetch_assoc($product_query)) {
+        $cart_data = [[
+            'id' => $product['id'],
+            'name' => $product['name'],
+            'image' => $product['image'],
+            'price' => $product['price'],
+            'quantity' => $quantity,
+            'part' => 'Dada' // Default part
+        ]];
+        $total_price = $product['price'] * $quantity;
+    }
+}
+
 // Get user data from session
 $user = $_SESSION['user'];
 
