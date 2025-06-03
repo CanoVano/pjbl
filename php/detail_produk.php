@@ -379,9 +379,9 @@ if (isset($_SESSION['user'])) {
                         <!-- Action Buttons -->
                         <div class="action-buttons">
                             <button type="submit" name="add_to_cart" class="cart-button">
-                                <i class="fas fa-shopping-cart"></i>
+                                <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
                             </button>
-                            <button type="button" class="order-button" onclick="redirectToCheckout()">
+                            <button type="button" class="order-button" id="pesan-sekarang-btn">
                                 Pesan Sekarang
                             </button>
                         </div>
@@ -410,19 +410,55 @@ if (isset($_SESSION['user'])) {
     </div>
 
     <script>
-        // Function to redirect to checkout page
-        function redirectToCheckout() {
-            const quantity = document.getElementById('quantity').value;
+        // Function to redirect to checkout page - NOW modified to add to cart via AJAX and redirect to cart page
+        document.getElementById('pesan-sekarang-btn').addEventListener('click', function() {
+            const quantityInput = document.getElementById('quantity');
+            const quantity = quantityInput.value;
             const productId = <?php echo $product_id; ?>;
-            
+            const orderButton = this; // Reference to the "Pesan Sekarang" button
+
             if (quantity < 1) {
                 alert('Jumlah harus minimal 1');
                 return;
             }
-            
-            // Redirect to checkout with product ID and quantity
-            window.location.href = `checkout.php?id=${productId}&quantity=${quantity}`;
-        }
+
+            // Optional: Show loading state
+            orderButton.textContent = 'Memproses...';
+            orderButton.disabled = true;
+
+            // Prepare form data for AJAX request
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            formData.append('quantity', quantity);
+            // Note: add_to_cart.php expects product_id and potentially quantity. Let's adjust add_to_cart.php if needed later.
+            // However, based on menu.php, it only expects product_id and adds quantity 1.
+            // We might need to modify add_to_cart.php to handle quantity correctly from detail_produk.
+            // For now, let's simulate adding 1 and then handle quantity update in cart if necessary, or better, update add_to_cart.php.
+
+             // Let's update add_to_cart.php to handle quantity from POST
+            fetch('add_to_cart.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    // Redirect to cart page on success
+                    window.location.href = 'cart.php';
+                } else {
+                    // Handle error
+                    alert('Gagal menambahkan produk ke keranjang: ' + data.message);
+                    orderButton.textContent = 'Pesan Sekarang';
+                    orderButton.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat menambahkan produk ke keranjang.');
+                orderButton.textContent = 'Pesan Sekarang';
+                orderButton.disabled = false;
+            });
+        });
     </script>
 </body>
 </html>

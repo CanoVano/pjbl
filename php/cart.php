@@ -2,7 +2,8 @@
 session_start();
 include 'koneksi.php';
 
-// Atur array voucher yang tersedia
+// Removed hardcoded voucher data and claiming logic
+/*
 $voucher_tersedia = [
     "DISKON25" => ["nilai" => 25, "jenis" => "persen"],
     "DISKON50" => ["nilai" => 50, "jenis" => "persen"],
@@ -21,6 +22,7 @@ if (isset($_POST['klaim_voucher'])) {
     header("Location: " . $_SERVER['PHP_SELF']);
     exit();
 }
+*/
 
 // Proses menghapus item dari keranjang
 if (isset($_POST['remove_item'])) {
@@ -89,8 +91,9 @@ if (isset($_SESSION['user'])) {
 }
 
 $voucher_diklaim_saat_ini = $_SESSION['voucher_diklaim'] ?? null;
-$error_voucher = $_SESSION['error_voucher'] ?? null;
-unset($_SESSION['error_voucher']);
+// Removed $error_voucher as it's handled in voucher.php now
+// $error_voucher = $_SESSION['error_voucher'] ?? null;
+// unset($_SESSION['error_voucher']);
 
 // Ambil data produk dari database
 $cart_items = [];
@@ -124,17 +127,33 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
 // Hitung diskon jika ada voucher yang diklaim
 $diskon = 0;
 $harga_setelah_diskon = $total_harga;
+$voucher_not_applied_message = '';
 
-if ($voucher_diklaim_saat_ini && isset($voucher_tersedia[$voucher_diklaim_saat_ini])) {
-    $voucher = $voucher_tersedia[$voucher_diklaim_saat_ini];
-    
-    if ($voucher['jenis'] == 'persen') {
-        $diskon = ($total_harga * $voucher['nilai']) / 100;
-        $harga_setelah_diskon = $total_harga - $diskon;
-    } else { // Jika jenisnya 'nominal'
-        $diskon = $voucher['nilai'];
-        $harga_setelah_diskon = $total_harga - $diskon;
-        if ($harga_setelah_diskon < 0) $harga_setelah_diskon = 0;
+// Get voucher details from voucher.php if claimed - Simplified lookup including min_pembelian
+$voucher_details_lookup = [
+    "DISKON25" => ["nilai" => 25, "jenis" => "persen", "min_pembelian" => 50000],
+    "DISKON50" => ["nilai" => 50, "jenis" => "persen", "min_pembelian" => 100000],
+    "DISKON5"  => ["nilai" => 5,  "jenis" => "persen", "min_pembelian" => 0],
+];
+
+$voucher_details = [];
+if ($voucher_diklaim_saat_ini && isset($voucher_details_lookup[$voucher_diklaim_saat_ini])) {
+    $voucher_details = $voucher_details_lookup[$voucher_diklaim_saat_ini];
+
+    // Check if minimum purchase amount is met
+    if ($total_harga >= $voucher_details['min_pembelian']) {
+        if ($voucher_details['jenis'] == 'persen') {
+            $diskon = ($total_harga * $voucher_details['nilai']) / 100;
+            $harga_setelah_diskon = $total_harga - $diskon;
+        } else { // Jika jenisnya 'nominal'
+            $diskon = $voucher_details['nilai'];
+            $harga_setelah_diskon = $total_harga - $diskon;
+            if ($harga_setelah_diskon < 0) $harga_setelah_diskon = 0;
+        }
+    } else {
+        // Set message if minimum purchase is not met
+        $voucher_not_applied_message = "Voucher \"" . $voucher_diklaim_saat_ini . "\" tidak dapat digunakan. Minimal pembelian adalah Rp" . number_format($voucher_details['min_pembelian'], 0, ',', '.') . ".";
+        $harga_setelah_diskon = $total_harga; // No discount applied
     }
 }
 
@@ -193,52 +212,6 @@ while ($row = mysqli_fetch_assoc($query_rekomendasi)) {
             text-decoration: none;
             color: #000000;
             font-size: 18px;
-        }
-
-        .discount-bar {
-            display: flex;
-            padding: 15px;
-            gap: 60px; 
-            overflow-x: auto;
-            background-color: #e9f7ef;
-            justify-content: center;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        .discount-item {
-            background-color: #c9f1dd;
-            color: #000000;
-            border-radius: 10px;
-            padding: 10px 32px;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            flex-shrink: 0;
-            width: auto;
-        }
-
-        .discount-item span {
-            font-weight: bold;
-            margin-right: 8px;
-        }
-
-        .discount-item button {
-            background-color: #4E94B2;
-            color: white;
-            border: none;
-            padding: 7px 12px;
-            border-radius: 3px;
-            font-size: 13px;
-            cursor: pointer;
-            margin-left: 15px;
-        }
-
-        .discount-item button.diklaim {
-            background-color: #ccc;
-            color: #666;
-            cursor: not-allowed;
-            border: 1px solid #999;
         }
 
         .cart-item {
@@ -379,7 +352,7 @@ while ($row = mysqli_fetch_assoc($query_rekomendasi)) {
             margin-bottom: 5px;
         }
 
-        .subtotal-label, .discount-label {
+        .subtotal-label, .discount-label, .total-label {
             font-size: 14px;
         }
 
@@ -389,7 +362,7 @@ while ($row = mysqli_fetch_assoc($query_rekomendasi)) {
             margin-top: 15px;
         }
 
-        .subtotal-amount, .discount-amount {
+        .subtotal-amount, .discount-amount, .total-amount {
             font-size: 14px;
         }
 
@@ -442,6 +415,13 @@ while ($row = mysqli_fetch_assoc($query_rekomendasi)) {
             text-decoration: none;
             display: inline-block;
         }
+        .voucher-not-applied-message {
+            color: orange;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
     </style>
 </head>
 <body>
@@ -451,35 +431,10 @@ while ($row = mysqli_fetch_assoc($query_rekomendasi)) {
             <a href="cart.php">&#128722; <?= array_sum($_SESSION['cart'] ?? []) ?></a>
         </div>
 
-        <div class="discount-bar">
-            <?php
-            $discounts = [
-                ["label" => "-25%", "kode" => "DISKON25"],
-                ["label" => "-50%", "kode" => "DISKON50"],
-                ["label" => "-5%", "kode" => "DISKON5"],
-            ];
-
-            foreach ($discounts as $discount) {
-                $kode = $discount["kode"];
-                $diklaim = ($voucher_diklaim_saat_ini === $kode);
-
-                echo '<div class="discount-item"><span>' . $discount["label"] . '</span> ';
-                if (!$diklaim) {
-                    echo '<form method="POST" action="">';
-                    echo '<input type="hidden" name="kode_voucher" value="' . $kode . '">';
-                    echo '<button type="submit" name="klaim_voucher">Klaim</button>';
-                    echo '</form>';
-                } else {
-                    echo '<button class="diklaim" disabled>Diklaim</button>';
-                }
-                echo '</div>';
-            }
-            ?>
-        </div>
-
-        <?php if ($error_voucher): ?>
+        <?php // Removed error voucher display as it's handled in voucher.php now
+         /* if ($error_voucher): ?>
             <p class="error-voucher"><?php echo $error_voucher; ?></p>
-        <?php endif; ?>
+        <?php endif; */ ?>
 
         <?php if (empty($cart_items)): ?>
             <div class="empty-cart">
@@ -487,6 +442,15 @@ while ($row = mysqli_fetch_assoc($query_rekomendasi)) {
                 <a href="menu.php" class="back-to-shopping">Lanjut Belanja</a>
             </div>
         <?php else: ?>
+            <!-- Section for displaying voucher status (claimed or link to claim) -->
+            <div style="text-align: center; margin: 20px 0;">
+                <?php if ($voucher_diklaim_saat_ini): ?>
+                    <p>Voucher Terklaim: <strong><?php echo $voucher_diklaim_saat_ini; ?></strong></p>
+                <?php else: ?>
+                    <p>Belum ada voucher. <a href="voucher.php" style="text-decoration: none; color: #000000;">Klik &#1279f7; untuk Klaim Voucher</a></p>
+                <?php endif; ?>
+            </div>
+
             <?php foreach ($cart_items as $item): ?>
                 <div class="cart-item">
                     <img src="../images/<?= $item["image"] ?>" alt="<?= $item["name"] ?>">
@@ -534,11 +498,15 @@ while ($row = mysqli_fetch_assoc($query_rekomendasi)) {
                     <div class="subtotal-amount">Rp <?= number_format($total_harga, 0, ',', '.') ?></div>
                 </div>
                 
-                <?php if ($diskon > 0): ?>
+                <?php if ($diskon > 0): // Discount applied ?>
                 <div class="total-row">
-                    <div class="discount-label">Diskon (<?= $voucher_tersedia[$voucher_diklaim_saat_ini]['nilai'] ?>%)</div>
+                    <div class="discount-label">Diskon (<?php echo $voucher_details['nilai']; ?>%)</div>
                     <div class="discount-amount">- Rp <?= number_format($diskon, 0, ',', '.') ?></div>
                 </div>
+                <?php elseif ($voucher_diklaim_saat_ini && !empty($voucher_details) && $total_harga < $voucher_details['min_pembelian']): // Voucher claimed but min purchase not met ?>
+                     <div class="voucher-not-applied-message">
+                        <?php echo $voucher_not_applied_message; ?> <a href="voucher.php" style="text-decoration: none; color: inherit;">🎟️</a>
+                     </div>
                 <?php endif; ?>
                 
                 <div class="total-row">

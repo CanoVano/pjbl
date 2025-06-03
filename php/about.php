@@ -58,7 +58,7 @@
     <section class="team-section">
   <div class="team-container">
     <div class="team-photo">
-      <img src="images/foto kelompok pjbl.jpg" alt="Foto Tim Hexagon">
+      <img src="../images/foto kelompok pjbl.jpg" alt="Foto Tim Hexagon">
     </div>
     <div class="team-desc">
       <h3>Tim Hexagon mart</h3>

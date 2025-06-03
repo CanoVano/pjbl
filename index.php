@@ -14,10 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (mysqli_num_rows($cek) > 0) {
         $notif = '<div class="notif error">Username atau Email sudah digunakan!</div>';
     } else {
-        $simpan = mysqli_query($koneksi, "INSERT INTO users (fullname, username, email, password) VALUES ('$fullname', '$username', '$email', '$telepon', '$password')");
+        $simpan = mysqli_query($koneksi, "INSERT INTO users (fullname, username, email, telepon, password) VALUES ('$fullname', '$username', '$email', '$telepon', '$password')");
         if ($simpan) {
             $notif = '<div class="notif success">Register berhasil! Mengalihkan ke login...</div>';
-            echo "<meta http-equiv='refresh' content='2;url=login.php'>";
+            echo "<meta http-equiv='refresh' content='2;url=php/login.php'>";
         } else {
             $notif = '<div class="notif error">Register gagal! Silakan coba lagi.</div>';
         }
