@@ -447,7 +447,7 @@ while ($row = mysqli_fetch_assoc($query_rekomendasi)) {
                 <?php if ($voucher_diklaim_saat_ini): ?>
                     <p>Voucher Terklaim: <strong><?php echo $voucher_diklaim_saat_ini; ?></strong></p>
                 <?php else: ?>
-                    <p>Belum ada voucher. <a href="voucher.php" style="text-decoration: none; color: #000000;">Klik &#1279f7; untuk Klaim Voucher</a></p>
+                    <p>Belum ada voucher. <a href="voucher.php" style="text-decoration: none; color: #000000;">Klik 🎟️ untuk Klaim Voucher</a></p>
                 <?php endif; ?>
             </div>
 

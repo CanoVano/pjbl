@@ -138,16 +138,5 @@ $popular_posts_result = mysqli_query($koneksi, $popular_posts_query);
         </div>
     </section>
 </main>
-<script>
-    const links = document.querySelectorAll('.navbar-center a');
-    const currentPage = window.location.pathname.split("/").pop(); // Ambil nama file terakhir
-
-    links.forEach(link => {
-        const href = link.getAttribute('href').split("/").pop(); // Ambil nama file terakhir juga
-        if (href === currentPage) {
-            link.classList.add('active');
-        }
-    });
-</script>
 </body>
 </html>
