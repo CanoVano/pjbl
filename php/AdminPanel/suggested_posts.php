@@ -3,10 +3,10 @@ require "session.php";
 require "../koneksi.php";
 
 // Filter & Sorting
-$allowed_sort = ['id', 'title', 'content', 'created_at'];
+$allowed_sort = ['main_post_id', 'suggested_post_id'];
 $allowed_order = ['asc', 'desc'];
 
-$sort_by = in_array($_GET['sort_by'] ?? '', $allowed_sort) ? $_GET['sort_by'] : 'id';
+$sort_by = in_array($_GET['sort_by'] ?? '', $allowed_sort) ? $_GET['sort_by'] : 'main_post_id';
 $order = in_array(strtolower($_GET['order'] ?? ''), $allowed_order) ? strtolower($_GET['order']) : 'desc';
 $search = $_GET['search'] ?? '';
 $search_safe = "%" . $koneksi->real_escape_string($search) . "%";
@@ -200,8 +200,8 @@ if ($op == 'delete') {
                         <td><?= htmlspecialchars($row['main_post_id']) ?></td>
                         <td><?= htmlspecialchars($row['suggested_post_id']) ?></td>
                         <td>
-                            <a href="suggested_posts.php?op=edit&id=<?= $row['id'] ?>" class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <a href="suggested_posts.php?op=delete&id=<?= $row['id'] ?>" onclick="return confirm('Yakin ingin hapus data ini?')" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></a>
+                            <a href="suggested_posts.php?op=edit&id=<?= $row['main_post_id'] ?>" class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a href="suggested_posts.php?op=delete&id=<?= $row['main_post_id'] ?>" onclick="return confirm('Yakin ingin hapus data ini?')" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></a>
                         </td>
                     </tr>
                     <?php endwhile; else: ?>

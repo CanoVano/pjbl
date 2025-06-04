@@ -226,7 +226,7 @@ if ($op == 'delete') {
                                 $stmt->execute();
                                 $result = $stmt->get_result();
                             } else {
-                                $result = mysqli_query($koneksi, "SELECT * FROM reviews ORDER BY $sort_by $order");
+                                $result = mysqli_query($koneksi, "SELECT * FROM review ORDER BY $sort_by $order");
                             }
 
                             $urut = 1;
