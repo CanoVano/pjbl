@@ -122,7 +122,7 @@ $_SESSION['user'] = $current_user;
         }
         
         .header {
-            background-color: #8ed8c3;
+            background-color: #F6AB0E;
             color: #333;
             padding: 15px;
             display: flex;
@@ -147,7 +147,7 @@ $_SESSION['user'] = $current_user;
             height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #8ed8c3;
+            border: 3px solid #F6AB0E;
             position: relative;
         }
         
@@ -159,7 +159,7 @@ $_SESSION['user'] = $current_user;
         }
         
         .btn {
-            border: 2px solid #8ed8c3;
+            border: 2px solid #F6AB0E;
             color: #333;
             background-color: white;
             padding: 8px 20px;
@@ -178,7 +178,7 @@ $_SESSION['user'] = $current_user;
         }
         
         .info-box {
-            background-color: #8ed8c3;
+            background-color: #F6AB0E;
             margin: 10px 20px;
             padding: 15px;
             border-radius: 5px;
@@ -212,7 +212,7 @@ $_SESSION['user'] = $current_user;
         }
         
         .submit-btn {
-            background-color: #8ed8c3;
+            background-color: #F6AB0E;
             color: white;
             border: none;
             padding: 8px 20px;

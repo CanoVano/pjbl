@@ -19,8 +19,15 @@
   <h2 class="store-title">Hexagon Mart - Semarang</h2>
   <i class="fas fa-map-marker-alt"></i>
   <div class="map-box">
-    <img src="../images/gambar maps.jpg" alt="Map" class="map-image">
-  </div>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d797.1060321959911!2d110.4924860017519!3d-7.013121363237711!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708d1bfc084241%3A0xe7c44537093f70a2!2sAyam%20potong%20bu%20tari!5e0!3m2!1sid!2sid!4v1749005416195!5m2!1sid!2sid" 
+    width="650" 
+    height="150" 
+    style="border:0;" 
+    allowfullscreen="" 
+    loading="lazy" 
+    referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
+</div>
   <div class="info-item">
     <i class="fas fa-paper-plane"></i>
     <p>Jl. Pandanaran 2, Mugassari, Kec. Semarang Sel.,<br>
