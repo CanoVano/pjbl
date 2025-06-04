@@ -278,3 +278,74 @@ body {
 .floating-info-button:hover {
     background-color: #f0f0f0;
 }
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 20px;
+        text-align: center;
+    }
+
+    .navbar .logo img {
+        height: 50px;
+    }
+
+    .navbar-center {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .navbar-right {
+        margin-top: 10px;
+    }
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .hero-text h1 {
+        font-size: 2em;
+    }
+
+    .hero-text span {
+        display: block;
+    }
+
+    .hero-image img.circle-image {
+        width: 250px;
+        height: 250px;
+    }
+
+    .hero-text button {
+        padding: 10px 24px;
+        font-size: 1em;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar .logo img {
+        height: 40px;
+    }
+
+    .navbar-center a {
+        font-size: 14px;
+    }
+
+    .navbar-right a {
+        font-size: 18px;
+    }
+
+    .hero-text h1 {
+        font-size: 1.5em;
+    }
+
+    .hero-image img.circle-image {
+        width: 180px;
+        height: 180px;
+    }
+}

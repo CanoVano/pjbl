@@ -12,7 +12,6 @@ $jumlahusers = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM users"));
 $jumlahorders = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM orders"));
 $jumlahorderitems = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM order_items"));
 $jumlahreview = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM review"));
-$jumlahuserscarts = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM user_carts"));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -135,7 +134,7 @@ $jumlahuserscarts = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM user_c
                 ['Orders', $jumlahorders, 'orders.php', 'fa-box'],
                 ['Order Items', $jumlahorderitems, 'order_items.php', 'fa-cubes'],
                 ['Review', $jumlahreview, 'review.php', 'fa-star'],
-                ['Users Carts', $jumlahuserscarts, 'user_carts.php', 'fa-cart-plus'],
+                
             ];
 
             foreach ($data as $d) {

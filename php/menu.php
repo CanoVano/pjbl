@@ -316,6 +316,47 @@ body {
 .next-btn {
     right: 10px;
 }
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 20px;
+        text-align: center;
+    }
+
+    .navbar .logo img {
+        height: 50px;
+    }
+
+    .navbar-center {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .navbar-right {
+        margin-top: 10px;
+    }
+    
+}
+
+@media (max-width: 480px) {
+    .navbar .logo img {
+        height: 40px;
+    }
+
+    .navbar-center a {
+        font-size: 14px;
+    }
+
+    .navbar-right a {
+        font-size: 18px;
+    }
+
+    
+}
+
 </style>
 <body>
     <!-- Navbar -->

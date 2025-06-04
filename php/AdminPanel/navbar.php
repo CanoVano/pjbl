@@ -24,7 +24,6 @@
           ['Review', 'review.php', 'fa-star'],
           ['Saran Postingan', 'suggested_posts.php', 'fa-thumbs-up'],
           ['Users', 'users.php', 'fa-users'],
-          ['Users Carts', 'user_carts.php', 'fa-cart-plus'],
           ['Logout', 'logout.php', 'fa-right-from-bracket']
         ];
 

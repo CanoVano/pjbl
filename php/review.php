@@ -365,6 +365,32 @@ function renderStars($count) {
             font-size: 0.9em;
             margin-top: 5px;
         }
+
+        @media (max-width: 768px) {
+    .tabs {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 10px;
+    }
+
+    .tabs .tab img {
+        width: 120px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tabs {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tabs .tab img {
+        width: 100px;
+        height: 70px;
+    }
+}
+
     </style>
 </head>
 <body>

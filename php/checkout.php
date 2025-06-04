@@ -248,7 +248,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
             padding: 15px;
             background: #fff;
             border-radius: 8px;
-            margin-left: 20px;
+            margin-left: 19px;
+            margin-right: 19px;
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
