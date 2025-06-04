@@ -3,7 +3,7 @@ require "session.php";
 require "../koneksi.php";
 
 // Variabel form dan filter
-$allowed_sort = ['id', 'user_id', 'product_id', 'rating', 'created_at'];
+$allowed_sort = ['id', 'user_id', 'product_id', 'rating', 'tanggal'];
 $allowed_order = ['asc', 'desc'];
 
 $sort_by = in_array($_GET['sort_by'] ?? '', $allowed_sort) ? $_GET['sort_by'] : 'id';
@@ -140,7 +140,7 @@ if ($op == 'delete') {
                             <select name="sort_by" class="form-select">
                                 <option value="user_id" <?= ($sort_by == 'user_id') ? 'selected' : '' ?>>User ID</option>
                                 <option value="tanggal" <?= ($sort_by == 'tanggal') ? 'selected' : '' ?>>Tanggal</option>
-                                <option value="id" <?= ($sort_by == 'id') ? 'selected' : '' ?>>ID</option>
+                                <option value="id" <?= ($sort_by == 'komentar') ? 'selected' : '' ?>>Komentar</option>
                             </select>
                         </div>
                         <div class="col-md-2">
@@ -221,7 +221,7 @@ if ($op == 'delete') {
                         <tbody>
                             <?php
                             if ($search) {
-                                $stmt = $koneksi->prepare("SELECT * FROM reviews WHERE CAST(user_id AS CHAR) LIKE ? OR CAST(product_id AS CHAR) LIKE ? OR comment LIKE ? OR created_at LIKE ? ORDER BY $sort_by $order");
+                                $stmt = $koneksi->prepare("SELECT * FROM review WHERE CAST(user_id AS CHAR) LIKE ? OR CAST(product_id AS CHAR) LIKE ? OR komentar LIKE ? OR tanggal LIKE ? ORDER BY $sort_by $order");
                                 $stmt->bind_param("ssss", $search_safe, $search_safe, $search_safe, $search_safe);
                                 $stmt->execute();
                                 $result = $stmt->get_result();

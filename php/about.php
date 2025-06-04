@@ -50,7 +50,7 @@
     <img src="../images/anggota kelompok pjbl2.jpg" alt="Anggota Tim 2" onclick="showModal(this)" data-name="Fatih Dzaki" data-feature="Fitur Pembelian">
     <img src="../images/anggota kelompok pjbl3.jpg" alt="Anggota Tim 3" onclick="showModal(this)" data-name="Muhammad Syahrul" data-feature="Fitur Login Dan Register">
     <img src="../images/anggota kelompok pjbl4.jpg" alt="Anggota Tim 4" onclick="showModal(this)" data-name="Nizar Azzuhra" data-feature="Fitur Login Admin">
-    <img src="../images/anggota kelompok pjbl5.jpg" alt="Anggota Tim 5" onclick="showModal(this)" data-name="Revano Fachrezi" data-feature="Fitur Blog">
+    <img src="../images/revano.jpg" alt="Anggota Tim 5" onclick="showModal(this)" data-name="Revano Fachrezi" data-feature="Fitur Blog">
     <img src="../images/anggota kelompok pjbl6.jpg" alt="Anggota Tim 6" onclick="showModal(this)" data-name="Syavira Putri" data-feature="Fitur Ulasan Dan Kritik / Review">
   </div>
 </section>
